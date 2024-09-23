@@ -1,0 +1,27 @@
+<% flash.each do |flash_type, message| %>
+    <% if message.present? %>
+        <div data-notification-target="toast" class="toast bg-body shadow border border-light-subtle mb-3" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <div class="d-flex align-items-center gap-2 me-auto">
+                    <% if flash_type == "alert" %>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="18" width="18" class="text-danger col-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    <% end %>
+                    <% if flash_type == "notice" %>
+                        <svg class="text-success col-2" height="18" width="18" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    <% end %>
+                    <strong>Bootstrap</strong>
+                </div>
+                <%# <small>11 mins ago</small> %>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                <%= message %>
+            </div>
+            
+        </div>
+    <% end %>
+<% end %>

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+if gem list -i foreman > /dev/null 2>&1; then
+  foreman start -f Procfile.dev "$@"
+else
+  echo "foreman gem is not installed. Installing....."
+  gem install foreman
+  if [ $? -eq 0 ]; then
+    echo "foreman gem installed successfully."
+    foreman start -f Procfile.dev "$@"
+  else
+    echo "Failed to install Foreman gem. Please check your internet connection and try again."
+    exit 1
+  fi
+fi

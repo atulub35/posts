@@ -1,0 +1,14 @@
+<%= turbo_stream_from post %>
+<div class="card mb-2" id="<%= dom_id(post) %>">
+  <div class="card-body">
+    <h5 class="card-title text-muted">
+      <small class="float-right">
+        Posted at <%= post.created_at %>
+      </small>
+      <%= post.username %>
+    </h5>
+    <div class="card-text lead mb-2"><%= post.body %></div>
+    <%= button_to "Repost (#{post.repost_count})", post_repost_path(post), class: "card-link" %> 
+    <%= button_to "Likes (#{post.likes_count})", post_like_path(post), class: "card-link" %> 
+  </div>
+</div>

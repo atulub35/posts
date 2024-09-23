@@ -1,0 +1,24 @@
+<div class="container py-4">
+    <%= turbo_stream_from :posts %>
+    <div class="d-flex align-items-center gap-3 my-4" data-controller="submit-form">
+        <%= form_with url: posts_path, method: :get, local: true, data: { submit_form_target: "form", turbo_stream: "" }, html: { class: 'flex-grow-1' } do %>
+            <div class="position-relative flex-grow-1">
+                <div class="position-absolute top-0 end-0 bottom-0 start-0 ps-3 d-flex align-items-center" style="pointer-events: none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </div>
+                <%= text_field_tag :query, params[:query], data: { action: "submit-form#search" }, placeholder: "Type to search", class: "d-flex form-control ps-5", type: "text" %>
+            </div>
+        <% end %>
+        <%= button_to "New Post", new_post_path, method: :get, data: { turbo_frame: "edit_post"}, class: "btn btn-primary" %>
+    </div>
+    <div class="card border rounded">
+        <div class="row align-items-start border-bottom g-0 shadow-sm px-3">
+            <% ["Post", "Created By", "Created At", "Actions"].each do |header| %>
+                <%= content_tag :div, header, class: "p-2 fw-semibold col" %>
+            <% end %>
+        </div>
+        <%= render "list" %>
+    </div>
+    <%= turbo_frame_tag "edit_post" %>
+    <%= turbo_frame_tag "show" %>
+</div>

@@ -1,0 +1,38 @@
+<%= turbo_frame_tag "show" do %>
+    <div data-controller="turbo-modal" data-turbo-modal-modal-id-value="show-turbo-modal" data-turbo-modal-turbo-frame-id-value="show-turbo-modal">
+        <div data-turbo-modal-target="modalContainer">
+            <div
+                data-action="turbo:submit-end->turbo-modal#submitEnd turbo:submit-start->turbo-modal#submitStart"
+                class="modal fade" id="show-turbo-modal" data-bs-backdrop="static" data-turbo-modal-target="modal" tabindex="-1" aria-labelledby="turbo-modalModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content bg-body card">
+                        <div class="modal-header card-header">
+                            <h5 class="modal-title text-body text-truncate w-100" id="turbo-modalModalLabel">
+                                <% if params["type"] == "delete" %>
+                                    Are you sure?
+                                <% end %>
+                                <% if params["type"] == "show" %>
+                                    <%= @post.body %>
+                                <% end %>
+                            </h5>
+                            <button type="button" class="btn-close" data-action="turbo-modal#hideModal"></button>
+                        </div>
+                        <div class="modal-body scroll-sm">
+                            <%= post_body %>
+                        </div>
+                            <div class="modal-footer">
+                            <% if params["type"] == "delete" %>
+                                <%= button_to post_path(@post), method: :delete, class: 'btn btn-outline-danger', data: { action: "modal-form#submitModalForm" } do %>
+                                    Delete
+                                <% end %>
+                            <% end %>
+                            <button type="button" class="btn text-primary" data-bs-dismiss="modal">
+                                <%= params["type"] == "delete" ? "Cancel" : "Done" %>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<% end %>

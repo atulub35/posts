@@ -1,0 +1,18 @@
+<%= turbo_frame_tag 'posts' do %>
+    <% if @posts.present? %>
+        <%= render @posts %>
+    <% else %>
+        <% if params[:query].present? %>
+            <div class="alert alert-warning m-3" role="alert">
+                No Result Found!
+            </div>
+        <% else %>
+            <div class="d-flex flex-column m-3">
+                <div class="alert alert-warning flex-grow-1" role="alert">
+                    Time to create one
+                </div>
+                <%= button_to "New Post", new_post_path, method: :get, data: { turbo_frame: "edit_post" }, class: "btn btn-primary text-center", form: { class: "text-center" } %>
+            </div>
+        <% end %>
+    <% end %>
+<% end %>

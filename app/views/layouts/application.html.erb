@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html class="h-100">
+    <head>
+        <title>Blog</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+        <%= csrf_meta_tags %>
+        <%= csp_meta_tag %>
+
+        <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+        <%#= javascript_importmap_tags %>
+        <%= vite_client_tag %>
+        <%= vite_javascript_tag 'application' %>
+        <%= stylesheet_link_tag 'application' %>
+        <!--
+        If using a TypeScript entrypoint file:
+            vite_typescript_tag 'application'
+
+        If using a .jsx or .tsx entrypoint, add the extension:
+            vite_javascript_tag 'application.jsx'
+
+        Visit the guide for more information: https://vite-ruby.netlify.app/guide/rails
+        -->
+        <%= yield :head %>
+        <%= turbo_include_tags %>
+    </head>
+
+    <body class="h-100">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom shadow-sm">
+            <div class="container-fluid">
+                <%= link_to root_path, class: "navbar-brand" do %>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                <% end %>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <%= link_to "Home", root_path, class: "nav-link active" %>
+                    </li>
+                    <li class="nav-item">
+                        <%= link_to "Posts", posts_path, class: "nav-link" %>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Pricing</a>
+                    </li>
+                </ul>
+                <%= button_to destroy_user_session_path, method: :delete, class: "btn text-danger" do %> 
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                <% end %>
+                </div>
+            </div>
+        </nav>
+
+
+        <%= yield %>
+        <%= render "shared/flash/notification_turbo_frame" %>
+    </body>
+</html>

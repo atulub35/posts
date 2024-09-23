@@ -1,0 +1,5 @@
+<turbo-frame id="flash-notification">
+    <% flash.each do |flash_type, message| %>
+        <%= sf "Notification", message:  message, flash_type: flash_type %>
+    <% end %>
+</turbo-frame>
