@@ -1,15 +1,11 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
-if gem list -i foreman > /dev/null 2>&1; then
-  foreman start -f Procfile.dev "$@"
-else
-  echo "foreman gem is not installed. Installing....."
+if gem list --no-installed --exact --silent foreman; then
+  echo "Installing foreman..."
   gem install foreman
-  if [ $? -eq 0 ]; then
-    echo "foreman gem installed successfully."
-    foreman start -f Procfile.dev "$@"
-  else
-    echo "Failed to install Foreman gem. Please check your internet connection and try again."
-    exit 1
-  fi
 fi
+
+# Default to port 3000 if not specified
+export PORT="${PORT:-3000}"
+
+exec foreman start -f Procfile.dev --env /dev/null "$@"

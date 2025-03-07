@@ -1,0 +1,69 @@
+<div class="row">
+    <div class="col-12 col-md-8 offset-0 offset-md-2">
+        <div class="profile-card card my-2 border rounded-3 mt-3">
+            <%= form_for @user, url: profile_path, method: :patch, html: { multipart: true } do |f| %>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-12 col-sm-6">
+                            <h5 class="card-title">
+                                <%= "Edit " unless show %>
+                                Profile
+                            </h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="d-flex justify-content-end">
+                                <% if show %>
+                                    <%= link_to 'Edit Profile', edit_profile_path, class: 'btn btn-primary' %>  
+                                <% else %>
+                                    <%= link_to "Cancel", profiles_show_path, class: "btn text-primary" %>
+                                    <%= button_tag "Update", class: "btn btn-primary" %>
+                                <% end %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div 
+                        data-controller="progress-wrapper"
+                        data-action="turbo:submit-start->progress-wrapper#showLoading turbo:submit-end->progress-wrapper#stopLoading">
+                        <div class="row">
+                            <div class="col-12 col-sm-6 mb-3">
+                                <%= f.label :name, class: "form-label fs-6" %>
+                                <%= f.text_field :name, class: "form-control fw-light #{"border-transparent pe-none ps-0" if show}" %>
+                            </div>
+                            <div class="col-12 col-sm-6 mb-3">
+                                <%= f.label :avatar, class: "form-label fs-6" %>
+                                <%= f.file_field :avatar, class: "form-control fw-light #{"border-transparent pe-none ps-0" if show}" %>
+                            </div>
+
+                            <div class="col-12 col-sm-6 mb-3">
+                                <%= f.label :email, class: "form-label fs-6" %>
+                                <%= f.email_field :email, class: "form-control fw-light #{"border-transparent pe-none ps-0" if show}" %>
+                            </div>
+                            <div class="col-12 col-sm-6 mb-3">
+                                <%= f.label :phone_number, class: "form-label fs-6" %>
+                                <%= f.text_field :phone_number, class: "form-control fw-light #{"border-transparent pe-none ps-0" if show}" %>
+                            </div>
+
+                            <div class="col-12 col-sm-6 mb-3">
+                                <%= f.label :language, class: "form-label fs-6" %>
+                                <%= f.text_field :language, class: "form-control fw-light #{"border-transparent pe-none ps-0" if show}" %>
+                            </div>
+
+                            <div class="col-12 col-sm-6 mb-3">
+                                <%= f.label :timezone, class: "form-label fs-6" %>
+                                <%= f.text_field :timezone, class: "form-control fw-light #{"border-transparent pe-none ps-0" if show}" %>
+                            </div>
+
+                            <div class="col-12 col-sm-6 mb-3">
+                                <%#= f.check_box :remove_avatar %>
+                                <%#= f.label :remove_avatar, 'Remove avatar' %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% end %>
+        </div>
+    </div>
+</div>

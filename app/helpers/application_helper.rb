@@ -1,4 +1,6 @@
 module ApplicationHelper
+  include Pagy::Frontend
+  
   def time_ago(time, zone=nil)
     return '' if zone.blank?
     now  = Time.now
@@ -25,4 +27,37 @@ module ApplicationHelper
     "#{us_date_format(time)} #{time.strftime('%I:%M %p')}"
   end
 
+  # Override pagy_nav method
+  def pagy_nav(pagy)
+    html = %(<nav class="custom-pagy-nav" aria-label="pager">)
+    html << '<ul class="pagination">'
+
+    # Previous button
+    if pagy.prev
+      html << %(<li class="page-item">#{link_to 'Previous', url_for(page: pagy.prev), class: 'page-link', data: { turbo_stream: "" }}</li>)
+    else
+      html << '<li class="page-item disabled"><span class="page-link">Previous</span></li>'
+    end
+
+    # Page numbers
+    pagy.series.each do |item|
+      if item.is_a?(Integer)
+        html << %(<li class="page-item #{'active' if item == pagy.page}">#{link_to item, url_for(page: item), class: 'page-link', data: { turbo_stream: "" }}</li>)
+      elsif item.is_a?(String)
+        html << %(<li class="page-item disabled"><span class="page-link">#{item}</span></li>)
+      end
+    end
+
+    # Next button
+    if pagy.next
+      html << %(<li class="page-item">#{link_to 'Next', url_for(page: pagy.next), class: 'page-link', data: { turbo_stream: "" }}</li>)
+    else
+      html << '<li class="page-item disabled"><span class="page-link">Next</span></li>'
+    end
+
+    html << '</ul>'
+    html << '</nav>'
+    html.html_safe
+  end
+  
 end

@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'profiles/show'
+  get 'profiles/edit'
+  get 'profiles/update'
   devise_for :users, controllers: {
     sessions: 'user/sessions'
   }
@@ -11,6 +14,8 @@ Rails.application.routes.draw do
       get 'repost'
     end
   end
+
+  resource :profile, only: [:show, :edit, :update]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")

@@ -1,12 +1,13 @@
 class PostsController < ApplicationController
+  include Pagy::Backend
   before_action :authenticate_user!
   before_action :set_post, only: %i[destroy edit update show]
 
   def index
     if params[:query].present?
-      @posts = current_user.posts.search(params[:query])
+      @pagy, @posts = pagy(Post.search(params[:query]))
     else
-      @posts = current_user.posts.all.order(created_at: :desc)
+      @pagy, @posts = pagy(Post.all.order(created_at: :desc))
     end
     # @post = Post.new
   end
@@ -18,18 +19,17 @@ class PostsController < ApplicationController
   def create
     @post = current_user.posts.build(post_params)
     # @post = Post.new(post_params)
-    respond_to do |format|
-      if @post.save
-        # flash.now[:notice] = "Post created successfully."
-        # format.turbo_stream
-        format.html { redirect_to posts_path, notice: 'Post was successfully created.' }
-      else
-        # format.html { render :index }
-        # format.turbo_stream { render turbo_stream: turbo_stream.replace(@post, partial: 'posts/form', locals: { post: @post }) } ## New for this article
-        flash.now[:alert] = @post.errors.full_messages.first
-        format.turbo_stream { render :create, status: 406 }
-      end
-    end
+    # respond_to do |format|
+    #   if @post.save
+    #     # format.turbo_stream
+    #     format.html { redirect_to profiles_show_path, notice: 'Post was successfully created.' }
+    #   else
+    #     # format.turbo_stream { render turbo_stream: turbo_stream.replace(@post, partial: 'posts/form', locals: { post: @post }) } ## New for this article
+    #     flash.now[:alert] = @post.errors.full_messages.first
+    #     format.turbo_stream { render :create, status: 406 }
+    #   end
+    # end
+    redirect_to profiles_show_path
   end
 
   def edit
@@ -40,7 +40,7 @@ class PostsController < ApplicationController
     if @post.update(post_params)
       flash.now[:notice] = "Post was successfully updated."
       respond_to do |format|
-        format.html { redirect_to posts_path, notice: 'Post was successfully updated.' }
+        format.html { redirect_to profiles_show_path, notice: 'Post was successfully updated.' }
       end
     else
       respond_to do |format|
@@ -54,12 +54,12 @@ class PostsController < ApplicationController
   end
 
   def like
-    current_user.posts.find_by(id: params[:id]).increment(:likes_count).save ## New for this article
+    Post.find_by(id: params[:id]).increment(:likes_count).save ## New for this article
     redirect_to posts_path
   end
 
   def repost
-    current_user.posts.find_by(id: params[:id]).increment(:repost_count).save ## New for this article
+    Post.find_by(id: params[:id]).increment(:repost_count).save ## New for this article
     redirect_to posts_path
   end
 

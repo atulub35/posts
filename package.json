@@ -4,10 +4,14 @@
     "@hotwired/turbo-rails": "^8.0.9",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.3",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "sass": "^1.79.4"
   },
   "devDependencies": {
     "vite": "^5.0.0",
     "vite-plugin-ruby": "^5.1.0"
+  },
+  "scripts": {
+    "build:css": "sass ./app/assets/stylesheets/application.sass.scss:./app/assets/builds/application.css --no-source-map --load-path=node_modules"
   }
 }

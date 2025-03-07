@@ -1,7 +1,7 @@
 
 <div class="container h-100">
     <div class="row h-100 align-items-center">
-        <div class="col-5 offset-4">
+        <div class="col-12 col-md-5 offset-0 offset-md-4">
         <div class="card border-0 shadow-lg rounded-4" data-controller="modal-form login" data-action="turbo:submit-end->login#submitEnd turbo:submit-start->login#submitStart"> 
             <div class="card-body p-5">
                 <h2 class="mb-3">Sign in to your account</h2>
@@ -31,7 +31,7 @@
                     <% end %>
 
                     <div class="d-grid gap-2 col-12 mx-auto">
-                        <button type="button" class="btn btn-primary" data-login-target="button" data-action="modal-form#submitModalForm">Save changes</button>
+                        <button type="button" class="btn btn-primary" data-login-target="button" data-action="modal-form#submitModalForm">Sign In</button>
                         <%#= f.submit "Log in", class: "btn btn-primary" %>
                     </div>
                     <%= render "devise/shared/links" %>

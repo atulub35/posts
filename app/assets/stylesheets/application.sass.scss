@@ -1,0 +1,40 @@
+// Entry point for your Sass build
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS (and SCSS, if configured) file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+[data-bs-theme="dark"] .card {
+    --bs-bg-opacity: 1;
+    background-color: rgba(var(--bs-tertiary-bg-rgb), var(--bs-bg-opacity)) !important;
+}
+html {
+    background-color: #F1F3F4;
+    &[data-bs-theme="dark"] {
+        background-color: var(--bs-body-bg);
+    }
+    // FIXME: intentionally kept these styles here,
+    // affected by bootstrap-3's reset css
+    small {
+        color: #777777;
+    }
+    label {
+        // margin-bottom: 8px;
+    }
+}
+ @import "Inter";
+ @import "variables";
+ @import "./screens/posts";
+ @import "./screens/profile";
+ @import "./components/sidebar";
+ @import 'bootstrap/scss/bootstrap';

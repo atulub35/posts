@@ -1,4 +1,4 @@
-
+web: bin/rails server -p 3001
 vite: bin/vite dev
-web: bin/rails s
 redis: redis-server
+css: yarn build:css --watch

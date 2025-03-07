@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "2.7.6"
+ruby '3.3.5'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.6"
@@ -49,8 +49,13 @@ gem "bootsnap", require: false
 # gem "image_processing", "~> 1.2"
 
 gem "devise" 
-gem 'bootstrap', '~> 5.2.0'
+gem 'bootstrap', '~> 5.3.3'
 gem 'vite_rails'
+gem 'pagy', '~> 9.1'
+gem 'nokogiri', '>= 1.16.5'
+gem 'mini_magick'
+gem 'image_processing', '~> 1.2'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
@@ -75,3 +80,5 @@ group :test do
 end
 
 gem "byebug", "~> 11.1", :groups => [:development, :test]
+
+gem "cssbundling-rails", "~> 1.4"

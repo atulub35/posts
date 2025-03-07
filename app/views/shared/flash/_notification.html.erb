@@ -1,6 +1,6 @@
 <% flash.each do |flash_type, message| %>
     <% if message.present? %>
-        <div data-notification-target="toast" class="toast bg-body shadow border border-light-subtle mb-3" role="alert" aria-live="assertive" aria-atomic="true">
+        <div data-notification-target="toast" class="toast bg-body shadow border rounded-3 border-light-subtle mb-3" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
                 <div class="d-flex align-items-center gap-2 me-auto">
                     <% if flash_type == "alert" %>
@@ -13,7 +13,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     <% end %>
-                    <strong>Bootstrap</strong>
+                    <strong>Just Now</strong>
                 </div>
                 <%# <small>11 mins ago</small> %>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
