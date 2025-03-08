@@ -18,18 +18,17 @@ class PostsController < ApplicationController
 
   def create
     @post = current_user.posts.build(post_params)
-    # @post = Post.new(post_params)
-    # respond_to do |format|
-    #   if @post.save
-    #     # format.turbo_stream
-    #     format.html { redirect_to profiles_show_path, notice: 'Post was successfully created.' }
-    #   else
-    #     # format.turbo_stream { render turbo_stream: turbo_stream.replace(@post, partial: 'posts/form', locals: { post: @post }) } ## New for this article
-    #     flash.now[:alert] = @post.errors.full_messages.first
-    #     format.turbo_stream { render :create, status: 406 }
-    #   end
-    # end
-    redirect_to profiles_show_path
+    respond_to do |format|
+      if @post.save
+        # format.turbo_stream
+        format.html { redirect_to posts_path, notice: 'Post was successfully created.' }
+      else
+        # format.turbo_stream { render turbo_stream: turbo_stream.replace(@post, partial: 'posts/form', locals: { post: @post }) } ## New for this article
+        flash.now[:alert] = @post.errors.full_messages.first
+        format.turbo_stream { render :create, status: 406 }
+      end
+    end
+    # redirect_to posts_path
   end
 
   def edit
@@ -40,7 +39,7 @@ class PostsController < ApplicationController
     if @post.update(post_params)
       flash.now[:notice] = "Post was successfully updated."
       respond_to do |format|
-        format.html { redirect_to profiles_show_path, notice: 'Post was successfully updated.' }
+        format.html { redirect_to posts_path, notice: 'Post was successfully updated.' }
       end
     else
       respond_to do |format|

@@ -30,30 +30,30 @@
                         <div class="row">
                             <div class="col-12 col-sm-6 mb-3">
                                 <%= f.label :name, class: "form-label fs-6" %>
-                                <%= f.text_field :name, readonly: true, class: "form-control fw-light #{"border-transparent" if show}" %>
+                                <%= f.text_field :name, readonly: show, class: "form-control fw-light #{"border-transparent" if show}" %>
                             </div>
                             <div class="col-12 col-sm-6 mb-3">
                                 <%= f.label :avatar, class: "form-label fs-6" %>
-                                <%= f.file_field :avatar, readonly: true, class: "form-control fw-light #{"border-transparent" if show}" %>
+                                <%= f.file_field :avatar, readonly: show, class: "form-control fw-light #{"border-transparent" if show}" %>
                             </div>
 
                             <div class="col-12 col-sm-6 mb-3">
                                 <%= f.label :email, class: "form-label fs-6" %>
-                                <%= f.email_field :email, readonly: true, class: "form-control fw-light #{"border-transparent" if show}" %>
+                                <%= f.email_field :email, readonly: show, class: "form-control fw-light #{"border-transparent" if show}" %>
                             </div>
                             <div class="col-12 col-sm-6 mb-3">
                                 <%= f.label :phone_number, class: "form-label fs-6" %>
-                                <%= f.text_field :phone_number, readonly: true, class: "form-control fw-light #{"border-transparent" if show}" %>
+                                <%= f.text_field :phone_number, readonly: show, class: "form-control fw-light #{"border-transparent" if show}" %>
                             </div>
 
                             <div class="col-12 col-sm-6 mb-3">
                                 <%= f.label :language, class: "form-label fs-6" %>
-                                <%= f.text_field :language, readonly: true, class: "form-control fw-light #{"border-transparent" if show}" %>
+                                <%= f.text_field :language, readonly: show, class: "form-control fw-light #{"border-transparent" if show}" %>
                             </div>
 
                             <div class="col-12 col-sm-6 mb-3">
                                 <%= f.label :timezone, class: "form-label fs-6" %>
-                                <%= f.text_field :timezone, readonly: true, class: "form-control fw-light #{"border-transparent" if show}" %>
+                                <%= f.text_field :timezone, readonly: show, class: "form-control fw-light #{"border-transparent" if show}" %>
                             </div>
 
                             <div class="col-12 col-sm-6 mb-3">
