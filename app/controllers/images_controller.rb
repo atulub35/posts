@@ -5,7 +5,7 @@ class ImagesController < ApplicationController
   end
   
   def create
-    client = OpenAI::Client.new(access_token: Rails.application.credentials.dig(:openai, :api_key))
+    client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"])
 
     begin
       response = client.images.generate(
