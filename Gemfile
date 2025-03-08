@@ -82,3 +82,5 @@ end
 gem "byebug", "~> 11.1", :groups => [:development, :test]
 
 gem "cssbundling-rails", "~> 1.4"
+
+gem "pg"
