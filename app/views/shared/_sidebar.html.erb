@@ -12,19 +12,17 @@
   <div class="logo-details">
     <!-- Icon and logo name -->
     <i class='bx bxl-c-plus-plus icon'></i>
-    <div class="logo_name">Codepen</div>
+    <div class="logo_name">Outsider</div>
     <i class='bx bx-menu' id="btn" data-sidebar-target="closeBtn" data-action="click->sidebar#toggleSidebar"></i>
     <!-- Menu button to toggle sidebar -->
   </div>
   
     <ul class="nav-list m-0 p-0" data-sidebar-target="navList">
         <!-- Search bar -->
-        <li>
+        <%= tag.li data: { bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Search" } do %>
             <i class='bx bx-search bg-light-subtle text-light-emphasis' data-sidebar-target="white" data-action="click->sidebar#toggleSidebar"></i>
             <input type="text" class="form-control" placeholder="Search...">
-            <span class="tooltip">Search</span>
-        </li>
-        
+        <% end %>
         <!-- List of navigation items -->
         <li>
             <%= link_to posts_path, class: "nav-link #{'bg-body-secondary' if current_page?(posts_path)}", data: { bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Posts" } do %>
@@ -40,52 +38,46 @@
         </li>
         
         <li>
-            <a href="#" class="nav-link">
+            <%= link_to chats_index_path, data: { bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Chats" }, class: "nav-link #{'bg-body-secondary' if current_page?(profiles_show_path)}" do %>
                 <i class='bx bx-chat'></i>
-                <span class="links_name">Messages</span>
-            </a>
-            <span class="tooltip">Messages</span>
+                <span class="links_name">Chats</span>
+            <% end %>
         </li>
         
-        <li>
+        <%= tag.li data: { bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Analytics" } do %>
             <a href="#" class="nav-link">
                 <i class='bx bx-pie-chart-alt-2'></i>
                 <span class="links_name">Analytics</span>
             </a>
-            <span class="tooltip">Analytics</span>
-        </li>
+        <% end %>
         
-        <li>
+        <%= tag.li data: { bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Files" } do %>
             <a href="#" class="nav-link">
                 <i class='bx bx-folder'></i>
                 <span class="links_name">File Manager</span>
             </a>
-            <span class="tooltip">Files</span>
-        </li>
+        <% end %>
         
-        <li>
+        <%= tag.li data: { bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Order" } do %>
             <a href="#" class="nav-link">
                 <i class='bx bx-cart-alt'></i>
                 <span class="links_name">Order</span>
             </a>
-            <span class="tooltip">Order</span>
-        </li>
+        <% end %>
         
-        <li>
+        <%= tag.li data: { bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Saved" } do %>
             <a href="#" class="nav-link">
                 <i class='bx bx-heart'></i>
                 <span class="links_name">Saved</span>
             </a>
-            <span class="tooltip">Saved</span>
-        </li>
+        <% end %>
         
-        <li>
+        <%= tag.li data: { bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Setting" } do %>
             <a href="#" class="nav-link">
                 <i class='bx bx-cog'></i>
                 <span class="links_name">Setting</span>
             </a>
-            <span class="tooltip">Setting</span>
-        </li>
+        <% end %>
         
         <!-- Profile section -->
         <li class="profile">

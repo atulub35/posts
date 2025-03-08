@@ -1,0 +1,6 @@
+<%= turbo_frame_tag dom_id(chat) do %>
+    <strong>You:</strong> <%= chat.message %>
+    <br>
+    <strong>AI:</strong> <%= chat.response %>
+  </div>
+<% end %>

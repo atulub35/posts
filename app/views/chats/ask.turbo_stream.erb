@@ -1,0 +1,7 @@
+<turbo-stream action="append" target="chat-messages">
+    <template>
+        <p><strong>You:</strong> <%= params[:message] %></p>
+        <p><strong>AI:</strong> <%= @ai_response %></p>
+        <hr>
+    </template>
+</turbo-stream>

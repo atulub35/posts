@@ -28,7 +28,7 @@
                                 <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
                                 </button>
-                                <ul class="dropdown-menu mx-0 shadow" data-bs-theme="light">
+                                <ul class="dropdown-menu mx-0 shadow">
                                     <li>
                                         <%= button_to post_path(post), method: :get, data: { turbo_frame: "show" }, params: { type: "show"}, class: 'dropdown-item d-flex gap-2 align-items-center' do %>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>

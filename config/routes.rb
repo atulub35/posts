@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'chats/index'
+  get 'chats/create'
   get 'profiles/show'
   get 'profiles/edit'
   get 'profiles/update'
@@ -16,6 +18,12 @@ Rails.application.routes.draw do
   end
 
   resource :profile, only: [:show, :edit, :update]
+  resources :chats, only: [:index, :create] do
+    collection do
+      post :ask
+    end
+  end
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")

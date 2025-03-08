@@ -1,6 +1,19 @@
 <div class="container">
     <% if user_signed_in? %> 
-        <div> Welcome <%= current_user.email %> </div> 
+        <div class="p-4 text-center"> 
+            <figure>
+                <blockquote class="blockquote">
+                <p>A well-known quote, contained in a blockquote element.</p>
+                </blockquote>
+                <figcaption class="blockquote-footer">
+                Someone famous in <cite title="Source Title">Source Title</cite>
+                </figcaption>
+            </figure>
+            Welcome <%= current_user.email %>
+            <p>
+                You have <%= link_to current_user.posts.count, posts_path, class: "" %> live posts.
+            </p>
+        </div> 
     <% else %>
         <%= button_to "Sign in", new_user_session_path, class: "btn btn-primary" %> 
     <% end %>
