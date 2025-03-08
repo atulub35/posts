@@ -1,0 +1,15 @@
+<h1>Generate an AI Image</h1>
+
+<%= form_with url: images_path, method: :post, data: { turbo_frame: "image_result" } do |form| %>
+  <div>
+    <%= form.label :prompt, "Enter Image Description:" %>
+    <%= form.text_field :prompt, required: true %>
+  </div>
+  <div>
+    <%= form.submit "Generate Image" %>
+  </div>
+<% end %>
+
+<turbo-frame id="image_result">
+  <!-- Image result will be updated dynamically here -->
+</turbo-frame>

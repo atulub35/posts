@@ -1,0 +1,9 @@
+<%= turbo_stream.replace "image_result" do %>
+  <% if @image_url %>
+    <h2>Generated Image:</h2>
+    <img src="<%= @image_url %>" alt="Generated AI Image">
+  <% elsif @error_message %>
+    <p style="color: red;"><%= @error_message %></p>
+  <% end %>
+  
+<% end %>

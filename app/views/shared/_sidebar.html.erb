@@ -26,7 +26,7 @@
         <!-- List of navigation items -->
         <li>
             <%= link_to posts_path, class: "nav-link #{'bg-body-secondary' if current_page?(posts_path)}", data: { bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Posts" } do %>
-                <i class='bx bx-grid-alt <%= "#{'bg-body-secondary' if current_page?(posts_path)}" %>'></i>
+                <i class='bx bxl-blogger <%= "#{'bg-body-secondary' if current_page?(posts_path)}" %>'></i>
                 <span class="links_name">Posts</span>
             <% end %>
         </li>
@@ -38,11 +38,24 @@
         </li>
         
         <li>
-            <%= link_to chats_index_path, data: { bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Chats" }, class: "nav-link #{'bg-body-secondary' if current_page?(profiles_show_path)}" do %>
-                <i class='bx bx-chat'></i>
+            <%= link_to chats_index_path, data: { bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Chats" }, class: "nav-link #{'bg-body-secondary' if current_page?(chats_index_path)}" do %>
+                <i class='bx bx-chat <%= "#{'bg-body-secondary' if current_page?(chats_index_path)}" %>'></i>
                 <span class="links_name">Chats</span>
             <% end %>
         </li>
+        <li>
+            <%= link_to images_path, data: { bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Image" }, class: "nav-link #{'bg-body-secondary' if current_page?(images_path)}" do %>
+                <i class='bx bx-image-alt <%= "#{'bg-body-secondary' if current_page?(images_path)}" %>'></i>
+                <span class="links_name">Image</span>
+            <% end %>
+        </li>
+        
+        <!-- <%= tag.li data: { bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Messages" } do %>
+            <a href="#" class="nav-link">
+                <i class='bx bx-chat'></i>
+                <span class="links_name">Messages</span>
+            </a>
+        <% end %>
         
         <%= tag.li data: { bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Analytics" } do %>
             <a href="#" class="nav-link">
@@ -78,7 +91,7 @@
                 <span class="links_name">Setting</span>
             </a>
         <% end %>
-        
+         -->
         <!-- Profile section -->
         <li class="profile">
             <div class="profile-details">
