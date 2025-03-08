@@ -1,9 +1,11 @@
 <%= turbo_stream.replace "image_result" do %>
-  <% if @image_url %>
-    <h2>Generated Image:</h2>
-    <img src="<%= @image_url %>" alt="Generated AI Image">
-  <% elsif @error_message %>
-    <p style="color: red;"><%= @error_message %></p>
-  <% end %>
+  <div class="d-flex flex-column gap-4 align-items-center justify-content-center p-4">
+    <% if @image_url %>
+      <h2>Generated Image:</h2>
+      <img src="<%= @image_url %>" alt="Generated AI Image" class="rounded-4">
+    <% elsif @error_message %>
+      <p style="color: red;"><%= @error_message %></p>
+    <% end %>
+  </div>
   
 <% end %>
