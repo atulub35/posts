@@ -1,7 +1,7 @@
 <turbo-stream action="append" target="chat-messages">
     <template>
-        <p><strong>You:</strong> <%= params[:message] %></p>
-        <p><strong>AI:</strong> <%= @ai_response %></p>
-        <hr>
+        <div class="my-4 <%= @message.role == 'user' ? 'user-message p-3 bg-secondary text-white rounded' : 'ai-message' %>">
+            <%= @message.content %>
+        </div>
     </template>
 </turbo-stream>

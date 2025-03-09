@@ -25,21 +25,19 @@
         -->
         <%= yield :head %>
         <%= turbo_include_tags %>
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+        <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     </head>
 
     <body class="h-100">
         <%= render "/shared/sidebar" %>
         <!-- Main content area -->
         <section class="home-section">
-            <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom shadow-sm">
+            <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom shadow-sm d-none d-md-flex">
             <div class="container-fluid">
-                <%= link_to root_path, class: "navbar-brand" do %>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                <% end %>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
-                </button>
+                </button> -->
                 <div class="collapse navbar-collapse" id="navbarText">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">

@@ -4,11 +4,17 @@
 @import "https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css";
 
 /* Global style settings */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif; /* Applying 'Poppins' font globally */
+// * {
+//   margin: 0;
+//   padding: 0;
+//   box-sizing: border-box;
+// }
+:root {
+  font-family: Inter, sans-serif;
+  font-feature-settings: 'liga' 1, 'calt' 1; /* fix for Chrome */
+}
+@supports (font-variation-settings: normal) {
+  :root { font-family: InterVariable, sans-serif; }
 }
 
 /* Sidebar container styling */

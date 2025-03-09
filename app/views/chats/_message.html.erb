@@ -1,0 +1,5 @@
+<%= turbo_frame_tag dom_id(message) do %>
+    <div class="my-4 <%= message.role == 'user' ? 'user-message p-3 bg-secondary text-white rounded' : 'ai-message' %>">
+        <%= message.content %>
+    </div>
+<% end %>

@@ -4,7 +4,7 @@ require "openai"
 
 class ChatsController < ApplicationController
   def index
-    @chats = Chat.all
+    @chats = current_user.messages.order(created_at: :asc)
   end
 
   def create
@@ -21,7 +21,7 @@ class ChatsController < ApplicationController
   end
 
   def ask
-    client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"])
+    client = OpenAI::Client.new(access_token: Rails.env.production? ? ENV["OPENAI_API_KEY"] : Rails.application.credentials.dig(:openai, :api_key))
     # Store user's message in DB
     user_message = current_user.messages.create!(role: "user", content: params[:message])
   
@@ -38,7 +38,7 @@ class ChatsController < ApplicationController
     ai_response = response.dig("choices", 0, "message", "content")
   
     # Store AI's response in DB
-    ai_message = current_user.messages.create!(role: "ai", content: ai_response)
+    @message = current_user.messages.create!(role: "ai", content: ai_response)
     @ai_response = ai_response
     @token_usage = response.dig("usage")
   

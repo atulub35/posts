@@ -86,3 +86,5 @@ gem "cssbundling-rails", "~> 1.4"
 gem "pg"
 gem "ruby-openai"
 
+
+gem "view_component", "~> 3.21"

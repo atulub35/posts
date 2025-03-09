@@ -59,5 +59,9 @@ module ApplicationHelper
     html << '</nav>'
     html.html_safe
   end
+
+  def vc(component_class, **kwargs, &block)
+    render component_class.new(**kwargs), &block
+  end
   
 end
