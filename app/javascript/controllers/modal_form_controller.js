@@ -21,4 +21,9 @@ export default class extends Controller {
         this.formTarget.reset()
     }
 
+    submitModalForm(event) {
+        this.formTarget.requestSubmit()
+    }
+
+
 }
