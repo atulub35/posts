@@ -3,6 +3,7 @@
     data-turbo-permanent    
     data-sidebar-open-class="open"
     data-sidebar-white-class="bg-white"
+    data-sidebar-active-class="active"
     data-sidebar-scroll-class="scroll"
     data-sidebar-menu-class="bx-menu"
     data-sidebar-menu-alt-right-class="bx-menu-alt-right"
@@ -20,72 +21,72 @@
     <ul class="nav-list m-0 p-0" data-sidebar-target="navList">
         <!-- Search bar -->
         <%= tag.li data: { bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Search" } do %>
-            <i class='bx bx-search bg-light-subtle text-light-emphasis' data-sidebar-target="white" data-action="click->sidebar#toggleSidebar"></i>
+            <i class='bx bx-search bg-primary-subtle text-light-emphasis' data-sidebar-target="white" data-action="click->sidebar#toggleSidebar"></i>
             <input type="text" class="form-control" placeholder="Search...">
         <% end %>
         <!-- List of navigation items -->
         <li>
-            <%= link_to posts_path, class: "nav-link #{'bg-body-secondary' if current_page?(posts_path)}", data: { bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Posts" } do %>
-                <i class='bx bxl-blogger <%= "#{'bg-body-secondary' if current_page?(posts_path)}" %>'></i>
+            <%= link_to posts_path, class: "nav-link #{'active' if current_page?(posts_path)}", data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Posts" } do %>
+                <i class='bx bxl-blogger'></i>
                 <span class="links_name">Posts</span>
             <% end %>
         </li>
         <li>
-            <%= link_to profiles_show_path, data: { bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Profile" }, class: "nav-link #{'bg-body-secondary' if current_page?(profiles_show_path)}" do %>
-                <i class='bx bx-user <%= "#{'bg-body-secondary' if current_page?(profiles_show_path)}" %>'></i>
+            <%= link_to profiles_show_path, data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Profile" }, class: "nav-link #{'active' if current_page?(profiles_show_path)}" do %>
+                <i class='bx bx-user'></i>
                 <span class="links_name">Profile</span>
             <% end %>
         </li>
         
         <li>
-            <%= link_to chats_index_path, data: { bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Chats" }, class: "nav-link #{'bg-body-secondary' if current_page?(chats_index_path)}" do %>
-                <i class='bx bx-chat <%= "#{'bg-body-secondary' if current_page?(chats_index_path)}" %>'></i>
+            <%= link_to chats_index_path, data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Chats" }, class: "nav-link #{'active' if current_page?(chats_index_path)}" do %>
+                <i class='bx bx-chat'></i>
                 <span class="links_name">Chats</span>
             <% end %>
         </li>
         <li>
-            <%= link_to images_path, data: { bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Image" }, class: "nav-link #{'bg-body-secondary' if current_page?(images_path)}" do %>
-                <i class='bx bx-image-alt <%= "#{'bg-body-secondary' if current_page?(images_path)}" %>'></i>
+            <%= link_to images_path, data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Image" }, class: "nav-link #{'active' if current_page?(images_path)}" do %>
+                <i class='bx bx-image-alt'></i>
                 <span class="links_name">Image</span>
             <% end %>
         </li>
         
-        <!-- <%= tag.li data: { bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Messages" } do %>
+        <!-- <%= tag.li data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Messages" } do %>
             <a href="#" class="nav-link">
                 <i class='bx bx-chat'></i>
                 <span class="links_name">Messages</span>
             </a>
         <% end %>
         
-        <%= tag.li data: { bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Analytics" } do %>
+        <%= tag.li data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Analytics" } do %>
             <a href="#" class="nav-link">
                 <i class='bx bx-pie-chart-alt-2'></i>
                 <span class="links_name">Analytics</span>
             </a>
         <% end %>
         
-        <%= tag.li data: { bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Files" } do %>
+        <%= tag.li data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Files" } do %>
             <a href="#" class="nav-link">
                 <i class='bx bx-folder'></i>
                 <span class="links_name">File Manager</span>
             </a>
         <% end %>
         
-        <%= tag.li data: { bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Order" } do %>
+        <%= tag.li data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Order" } do %>
             <a href="#" class="nav-link">
                 <i class='bx bx-cart-alt'></i>
                 <span class="links_name">Order</span>
             </a>
         <% end %>
         
-        <%= tag.li data: { bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Saved" } do %>
+        <%= tag.li data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Saved" } do %>
             <a href="#" class="nav-link">
                 <i class='bx bx-heart'></i>
                 <span class="links_name">Saved</span>
             </a>
         <% end %>
         
-        <%= tag.li data: { bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Setting" } do %>
+        <%= tag.li data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Setting" } do %>
             <a href="#" class="nav-link">
                 <i class='bx bx-cog'></i>
                 <span class="links_name">Setting</span>
@@ -96,13 +97,13 @@
         <li class="profile">
             <div class="profile-details">
                 <div class="name_job">
-                    <div class="name">Atul Ubarhande</div>
-                    <div class="job">@atul.ubarhande</div>
+                    <!-- <div class="name"><%= current_user&.name %></div> -->
                 </div>
-                <%= render "/shared/theme" %>
             </div>
-            
-            <%= button_to destroy_user_session_path, method: :delete, class: "btn" do %>
+            <%= button_to destroy_user_session_path,
+                class: "btn text-danger",
+                method: :delete,
+                form: {data: {turbo_confirm: 'Are you sure?'}} do %>
                 <i class='bx bx-log-out bg-light-subtle text-light-emphasis' data-sidebar-target="white" id="log_out"></i>
             <% end %>
         </li>

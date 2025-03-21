@@ -2,8 +2,8 @@ import { Controller } from '@hotwired/stimulus'
 import { Tooltip } from 'bootstrap'
 
 export default class extends Controller {
-    static targets = ['sidebar', 'closeBtn', 'white', 'navList']
-    static classes = ['open', 'scroll', 'menu', 'menuAltRight', 'white']
+    static targets = ['sidebar', 'closeBtn', 'white', 'navList', 'link']
+    static classes = ['open', 'scroll', 'menu', 'menuAltRight', 'white', 'active']
 
     connect() {
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
@@ -26,5 +26,16 @@ export default class extends Controller {
         } else {
             this.closeBtnTarget.classList.replace(this.menuAltRightClass, this.menuClass) // Revert back to original icon
         }
+    }
+
+    resetHilightedLink() {
+        this.linkTargets.forEach(element => {
+            element.classList.remove(this.activeClass)
+        })
+    }
+
+    hilightLink(event) {
+        this.resetHilightedLink()
+        event.currentTarget.classList.add(this.activeClass)
     }
 }

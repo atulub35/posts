@@ -14,10 +14,24 @@ export default class extends Controller {
 
     connect() {
         this.modalInstance.show()
+        
+        this.modalElement.addEventListener('hidden.bs.modal', this.cleanUp)
+    }
+
+    cleanUp = () => {
+        this.element.closest('turbo-frame').innerHTML = ''
+    }
+
+    disconnect() {
+        // this.modalElement.removeEventListener('hidden.bs.modal', this.cleanUp)
+    }
+
+    get modalElement () {
+        return document.getElementById(this.modalIdValue)
     }
 
     get modalInstance() {
-        return Modal.getOrCreateInstance(document.getElementById(this.modalIdValue))
+        return Modal.getOrCreateInstance(this.modalElement)
     }
 
     hideModal() {

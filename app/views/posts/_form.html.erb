@@ -1,5 +1,5 @@
 
-<%= vc TurboModalComponent, title: @post&.id.present? ? "Update Post" : "Create Post" do |c| %>
+<%= vc :TurboModal, title: @post&.id.present? ? "Update Post" : "Create Post" do |c| %>
     <%= form_with model: @post, id: dom_id(@post), html: { class: 'flex-grow-1' }, data: { modal_form_target: "form" } do |f| %>
         <% if @post.errors.any? %>
         <div id="error_explanation">

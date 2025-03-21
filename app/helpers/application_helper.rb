@@ -60,8 +60,8 @@ module ApplicationHelper
     html.html_safe
   end
 
-  def vc(component_class, **kwargs, &block)
-    render component_class.new(**kwargs), &block
+  def vc(component_name, **kwargs, &block)
+    class_name = "#{component_name}::#{component_name}Component"
+    render class_name.constantize.new(**kwargs), &block
   end
-  
 end

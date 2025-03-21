@@ -308,3 +308,12 @@
 .youtube-button i {
   font-size: 24px;
 }
+
+.sidebar {
+  .nav-link.active {
+    i {
+      --bs-bg-opacity: 1;
+      background-color: rgba(var(--bs-secondary-bg-rgb), var(--bs-bg-opacity)) !important;
+    }
+  }
+}

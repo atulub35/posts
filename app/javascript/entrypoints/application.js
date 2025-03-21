@@ -30,4 +30,3 @@ console.log('Visit the guide for more information: ', 'https://vite-ruby.netlify
 //= require popper
 //= require bootstrap
 import "../controllers"
-console.log('Hello!');
