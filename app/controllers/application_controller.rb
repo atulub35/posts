@@ -14,10 +14,21 @@ class ApplicationController < ActionController::Base
 
   def authenticate_user!
     if request.format.json?
+      Rails.logger.debug "=== Auth Debug ==="
+      Rails.logger.debug "Session ID: #{session.id}"
+      Rails.logger.debug "User Signed In: #{user_signed_in?}"
+      Rails.logger.debug "Current User: #{current_user&.id}"
+      Rails.logger.debug "Cookies: #{request.cookies.keys}"
+      Rails.logger.debug "=================="
+      
       if user_signed_in?
         super
       else
-        render json: { error: 'You need to sign in first!' }, status: :unauthorized
+        render json: { 
+          error: 'You need to sign in first!',
+          session_id: session.id,
+          cookies: request.cookies.keys
+        }, status: :unauthorized
       end
     else
       super

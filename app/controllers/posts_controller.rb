@@ -2,9 +2,9 @@ class PostsController < ApplicationController
   include Pagy::Backend
   protect_from_forgery with: :exception, unless: -> { request.format.json? }
   respond_to :html, :json, :turbo_stream
+  before_action :debug_session
   before_action :authenticate_user!
   before_action :set_post, only: %i[destroy edit update show like repost]
-  before_action :debug_session
 
   def index
     if params[:query].present?
@@ -108,9 +108,14 @@ class PostsController < ApplicationController
   private
 
   def debug_session
+    Rails.logger.debug "=== Session Debug Info ==="
+    Rails.logger.debug "Request Format: #{request.format}"
     Rails.logger.debug "Session ID: #{session.id}"
     Rails.logger.debug "User Signed In: #{user_signed_in?}"
     Rails.logger.debug "Current User: #{current_user&.id}"
+    Rails.logger.debug "Cookies: #{request.cookies.keys}"
+    Rails.logger.debug "Headers: #{request.headers['HTTP_COOKIE']}"
+    Rails.logger.debug "========================"
   end
 
   def broadcast_post(post)
