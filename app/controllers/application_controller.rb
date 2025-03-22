@@ -14,12 +14,12 @@ class ApplicationController < ActionController::Base
 
   def authenticate_user!
     if request.format.json?
-      Rails.logger.debug "=== Auth Debug ==="
-      Rails.logger.debug "Session ID: #{session.id}"
-      Rails.logger.debug "User Signed In: #{user_signed_in?}"
-      Rails.logger.debug "Current User: #{current_user&.id}"
-      Rails.logger.debug "Cookies: #{request.cookies.keys}"
-      Rails.logger.debug "=================="
+      Rails.logger.info "=== Auth Debug ==="
+      Rails.logger.info "Session ID: #{session.id}"
+      Rails.logger.info "User Signed In: #{user_signed_in?}"
+      Rails.logger.info "Current User: #{current_user&.id}"
+      Rails.logger.info "Cookies: #{request.cookies.keys}"
+      Rails.logger.info "=================="
       
       if user_signed_in?
         super

@@ -2,8 +2,8 @@ class PostsController < ApplicationController
   include Pagy::Backend
   protect_from_forgery with: :exception, unless: -> { request.format.json? }
   respond_to :html, :json, :turbo_stream
-  before_action :debug_session
   before_action :authenticate_user!
+  before_action :debug_session
   before_action :set_post, only: %i[destroy edit update show like repost]
 
   def index
@@ -16,7 +16,13 @@ class PostsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json
+      format.json do
+        if user_signed_in?
+          render 'index'
+        else
+          render json: { error: 'You need to sign in or sign up before continuing.' }, status: :unauthorized
+        end
+      end
     end
     
   end
@@ -108,14 +114,14 @@ class PostsController < ApplicationController
   private
 
   def debug_session
-    Rails.logger.debug "=== Session Debug Info ==="
-    Rails.logger.debug "Request Format: #{request.format}"
-    Rails.logger.debug "Session ID: #{session.id}"
-    Rails.logger.debug "User Signed In: #{user_signed_in?}"
-    Rails.logger.debug "Current User: #{current_user&.id}"
-    Rails.logger.debug "Cookies: #{request.cookies.keys}"
-    Rails.logger.debug "Headers: #{request.headers['HTTP_COOKIE']}"
-    Rails.logger.debug "========================"
+    Rails.logger.info "=== Session Debug Info ==="
+    Rails.logger.info "Request Format: #{request.format}"
+    Rails.logger.info "Session ID: #{session.id}"
+    Rails.logger.info "User Signed In: #{user_signed_in?}"
+    Rails.logger.info "Current User: #{current_user&.id}"
+    Rails.logger.info "Cookies: #{request.cookies.keys}"
+    Rails.logger.info "Headers: #{request.headers['HTTP_COOKIE']}"
+    Rails.logger.info "========================"
   end
 
   def broadcast_post(post)
