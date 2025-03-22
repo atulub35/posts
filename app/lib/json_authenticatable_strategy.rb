@@ -1,6 +1,7 @@
 class JsonAuthenticatableStrategy < Warden::Strategies::Base
   def valid?
-    request.format.json?
+    request.format.json? && 
+    request.path.start_with?('/users/sign_in')
   end
 
   def authenticate!

@@ -16,9 +16,10 @@ class ApplicationController < ActionController::Base
     if user_signed_in?
       super
     else
-      redirect_to new_user_session_path, :notice => 'You need to sign in first!'
-      ## if you want render 404 page
-      ## render :file => File.join(Rails.root, 'public/404'), :formats => [:html], :status => 404, :layout => false
+      respond_to do |format|
+        format.html { redirect_to new_user_session_path, notice: 'You need to sign in first!' }
+        format.json { render json: { error: 'You need to sign in first!' }, status: :unauthorized }
+      end
     end
   end
 end
