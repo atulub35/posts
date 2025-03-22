@@ -13,25 +13,12 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_user!
-    if request.format.json?
-      Rails.logger.info "=== Auth Debug ==="
-      Rails.logger.info "Session ID: #{session.id}"
-      Rails.logger.info "User Signed In: #{user_signed_in?}"
-      Rails.logger.info "Current User: #{current_user&.id}"
-      Rails.logger.info "Cookies: #{request.cookies.keys}"
-      Rails.logger.info "=================="
-      
-      if user_signed_in?
-        super
-      else
-        render json: { 
-          error: 'You need to sign in first!',
-          session_id: session.id,
-          cookies: request.cookies.keys
-        }, status: :unauthorized
-      end
-    else
+    if user_signed_in?
       super
+    else
+      redirect_to new_user_session_path, :notice => 'You need to sign in first!'
+      ## if you want render 404 page
+      ## render :file => File.join(Rails.root, 'public/404'), :formats => [:html], :status => 404, :layout => false
     end
   end
 end
