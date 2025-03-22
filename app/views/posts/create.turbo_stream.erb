@@ -1,1 +1,11 @@
 <%= turbo_stream.append "flash-notification", partial: "shared/flash/notification" %>
+
+<%= turbo_stream.prepend "posts" do %>
+  <%= render partial: "posts/post", locals: { post: @post, editable: current_user == @post.user } %>
+<% end %>
+
+<% if @post.errors.none? %>
+  <%= turbo_stream.update "new_post" do %>
+    <%= render partial: "posts/form", locals: { post: Post.new } %>
+  <% end %>
+<% end %>

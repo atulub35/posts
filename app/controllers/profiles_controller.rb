@@ -1,4 +1,5 @@
 class ProfilesController < ApplicationController
+  respond_to :html, :json
   before_action :authenticate_user!
 
   def show

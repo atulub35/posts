@@ -16,8 +16,13 @@
                         <%= content %>
                     </div>
                         <div class="modal-footer">
-                        <button type="button" class="btn text-primary" data-bs-dismiss="modal"><%= @cancel_text %></button>
+                        <% if !@destrictive %>
+                            <button type="button" class="btn text-primary" data-bs-dismiss="modal"><%= @cancel_text %></button>
+                        <% end %>
                         <%= footer %>
+                        <% if @destrictive %>
+                            <button type="button" class="btn text-primary" data-bs-dismiss="modal"><%= @cancel_text %></button>
+                        <% end %>
                     </div>
                 </div>
             </div>

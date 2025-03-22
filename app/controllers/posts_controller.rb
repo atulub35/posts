@@ -1,7 +1,9 @@
 class PostsController < ApplicationController
   include Pagy::Backend
+  protect_from_forgery with: :exception, unless: -> { request.format.json? }
+  respond_to :html, :json, :turbo_stream
   before_action :authenticate_user!
-  before_action :set_post, only: %i[destroy edit update show]
+  before_action :set_post, only: %i[destroy edit update show like repost]
 
   def index
     if params[:query].present?
@@ -9,7 +11,13 @@ class PostsController < ApplicationController
     else
       @pagy, @posts = pagy(Post.all.order(created_at: :desc))
     end
-    # @post = Post.new
+  
+
+    respond_to do |format|
+      format.html
+      format.json
+    end
+    
   end
 
   def new
@@ -20,15 +28,16 @@ class PostsController < ApplicationController
     @post = current_user.posts.build(post_params)
     respond_to do |format|
       if @post.save
-        # format.turbo_stream
+        format.turbo_stream
+        broadcast_post(@post)
         format.html { redirect_to posts_path, notice: 'Post was successfully created.' }
+        format.json
       else
-        # format.turbo_stream { render turbo_stream: turbo_stream.replace(@post, partial: 'posts/form', locals: { post: @post }) } ## New for this article
         flash.now[:alert] = @post.errors.full_messages.first
         format.turbo_stream { render :create, status: 406 }
+        format.json { render json: { error: @post.errors.full_messages.first }, status: 406 }
       end
     end
-    # redirect_to posts_path
   end
 
   def edit
@@ -38,6 +47,7 @@ class PostsController < ApplicationController
   def update
     if @post.update(post_params)
       flash.now[:notice] = "Post was successfully updated."
+      broadcast_post_update(@post)
       respond_to do |format|
         format.html { redirect_to posts_path, notice: 'Post was successfully updated.' }
       end
@@ -53,22 +63,42 @@ class PostsController < ApplicationController
   end
 
   def like
-    Post.find_by(id: params[:id]).increment(:likes_count).save ## New for this article
-    redirect_to posts_path
+    @post.increment(:likes_count).save
+    respond_to do |format|
+      if @post.save
+        broadcast_post_update(@post)
+        format.html { redirect_to posts_path, notice: 'Post was successfully liked.' }
+        format.json
+      else
+        flash.now[:alert] = @post.errors.full_messages.first
+        format.turbo_stream { render :create, status: 406 }
+        format.json { render json: { error: @post.errors.full_messages.first }, status: 406 }
+      end
+    end
   end
 
   def repost
-    Post.find_by(id: params[:id]).increment(:repost_count).save ## New for this article
-    redirect_to posts_path
+    @post.increment(:repost_count).save
+    respond_to do |format|
+      if @post.save
+        broadcast_post_update(@post)
+        format.html { redirect_to posts_path, notice: 'Post was successfully liked.' }
+        format.json
+      else
+        flash.now[:alert] = @post.errors.full_messages.first
+        format.turbo_stream { render :create, status: 406 }
+        format.json { render json: { error: @post.errors.full_messages.first }, status: 406 }
+      end
+    end
   end
 
   def destroy
     if @post.destroy
       flash.now[:notice] = "Post was successfully deleted."
+      broadcast_post_delete(@post)
     else
       flash[:error] = "There was an error deleting the post."
     end
-    # redirect_to posts_path
     respond_to do |format|
       format.html { redirect_to posts_path }
     end
@@ -76,8 +106,33 @@ class PostsController < ApplicationController
 
   private
 
+  def broadcast_post(post)
+    Turbo::StreamsChannel.broadcast_prepend_later_to(
+      "posts",
+      target: "posts",
+      partial: "posts/post",
+      locals: { post: post, editable: current_user.id == post.user.id }
+    )
+  end
+
+  def broadcast_post_update(post)
+    Turbo::StreamsChannel.broadcast_replace_later_to(
+      "posts",
+      target: post,
+      partial: "posts/post",
+      locals: { post: post, editable: current_user.id == post.user.id }
+    )
+  end
+
+  def broadcast_post_delete(post)
+    Turbo::StreamsChannel.broadcast_remove_to(
+      "posts",
+      target: post
+    )
+  end
+
   def set_post
-    @post = current_user.posts.find(params[:id])
+    @post = Post.find(params[:id])
   end
 
   def post_params

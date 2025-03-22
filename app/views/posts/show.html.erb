@@ -1,5 +1,13 @@
 <%= turbo_frame_tag "show" do %>
-    <%= vc :TurboModal, title: "show-turbo-modal", cancel_text: "Done" do |c| %>
+    <%= vc :TurboModal, title: "show-turbo-modal", cancel_text: "Done", destrictive: params[:type] == "delete" do |c| %>
         <%= post_body %>
+        <% if params[:type] == "delete" %>
+            <%= form_with model: @post, method: :delete, data: { modal_form_target: "form" } do |form| %>
+                <%= form.hidden_field :id, value: @post.id %>
+                <% c.with_footer do %>
+                    <button type="button" class="btn btn-danger" data-turbo-modal-target="button" data-action="modal-form#submitModalForm">Delete</button>
+                <% end %>
+            <% end %>
+        <% end %>
     <% end %>
 <% end %>

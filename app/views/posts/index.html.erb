@@ -16,7 +16,9 @@
                     <%= button_to "New Post", new_post_path, method: :get, data: { turbo_frame: "edit_post"}, class: "btn btn-primary" %>
                 </div>
             </div>
-            <%= render "list" %>
+            <div data-controller="post-actions" data-post-actions-current-user-id-value="<%= current_user&.id %>">
+                <%= render "list" %>
+            </div>
         </div>
     </div>
     <%= turbo_frame_tag "edit_post" %>

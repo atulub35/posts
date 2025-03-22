@@ -88,3 +88,4 @@ gem "ruby-openai"
 
 
 gem "view_component", "~> 3.21"
+gem 'rack-cors'

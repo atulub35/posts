@@ -179,6 +179,8 @@ GEM
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (2.2.9)
+    rack-cors (2.0.2)
+      rack (>= 2.0.0)
     rack-proxy (0.7.7)
       rack
     rack-test (2.1.0)
@@ -305,6 +307,7 @@ DEPENDENCIES
   pagy (~> 9.1)
   pg
   puma (~> 5.0)
+  rack-cors
   rails (~> 7.0.6)
   redis (~> 4.0)
   ruby-openai

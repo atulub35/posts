@@ -1,6 +1,6 @@
 <%= turbo_frame_tag 'posts' do %>
     <% if @posts.present? %>
-        <%= render @posts %>
+        <%= render partial: "posts/post", collection: @posts, locals: { editable: ->(post) { current_user.id == post.user.id } } %>
     <% else %>
         <% if params[:query].present? %>
             <div class="alert alert-warning m-3" role="alert">
