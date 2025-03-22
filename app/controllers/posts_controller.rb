@@ -4,6 +4,7 @@ class PostsController < ApplicationController
   respond_to :html, :json, :turbo_stream
   before_action :authenticate_user!
   before_action :set_post, only: %i[destroy edit update show like repost]
+  before_action :debug_session
 
   def index
     if params[:query].present?
@@ -105,6 +106,12 @@ class PostsController < ApplicationController
   end
 
   private
+
+  def debug_session
+    Rails.logger.debug "Session ID: #{session.id}"
+    Rails.logger.debug "User Signed In: #{user_signed_in?}"
+    Rails.logger.debug "Current User: #{current_user&.id}"
+  end
 
   def broadcast_post(post)
     Turbo::StreamsChannel.broadcast_prepend_later_to(

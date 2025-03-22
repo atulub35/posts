@@ -13,13 +13,14 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_user!
-    if user_signed_in?
-      super
-    else
-      respond_to do |format|
-        format.html { redirect_to new_user_session_path, notice: 'You need to sign in first!' }
-        format.json { render json: { error: 'You need to sign in first!' }, status: :unauthorized }
+    if request.format.json?
+      if user_signed_in?
+        super
+      else
+        render json: { error: 'You need to sign in first!' }, status: :unauthorized
       end
+    else
+      super
     end
   end
 end
