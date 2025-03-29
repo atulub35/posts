@@ -49,23 +49,34 @@ class User::SessionsController < Devise::SessionsController
   # end
 
   private
-
   def respond_with(resource, _opts = {})
-    if request.format.json?
-      @resource = resource
-      @redirect_path = after_sign_in_path_for(resource)
-      render 'create'
-    else
-      super
+    if request.format.json? 
+      render json: { message: 'Logged in successfully', user: resource }, status: :ok
     end
   end
 
   def respond_to_on_destroy
-    if request.format.json?
-      @redirect_path = after_sign_out_path_for(resource_name)
-      render 'destroy'
-    else
-      super
+    if request.format.json? 
+      head :no_content
     end
   end
+
+  # def respond_with(resource, _opts = {})
+  #   if request.format.json?
+  #     @resource = resource
+  #     @redirect_path = after_sign_in_path_for(resource)
+  #     render 'create'
+  #   else
+  #     super
+  #   end
+  # end
+
+  # def respond_to_on_destroy
+  #   if request.format.json?
+  #     @redirect_path = after_sign_out_path_for(resource_name)
+  #     render 'destroy'
+  #   else
+  #     super
+  #   end
+  # end
 end
