@@ -4,6 +4,7 @@ json.data do
       json.id post.id
       json.created_at post.created_at
       json.body post.body
+      json.title post.title
       json.updated_at post.updated_at
       json.likes_count post.likes_count
       json.repost_count post.repost_count

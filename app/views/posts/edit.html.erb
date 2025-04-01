@@ -1,3 +1,3 @@
 <%= turbo_frame_tag "edit_post" do %>
-    <%= render "form", path: post_path(@post), method: :put %>
+    <%= render :partial => "form", :locals => { path: post_path(@post), method: :put, title: @post&.id.present? ? params[:type] == "edit" ? "Update Post" : "Delete Post" : "Create Post" } %>
 <% end %>

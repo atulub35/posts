@@ -57,7 +57,10 @@ class User::SessionsController < Devise::SessionsController
 
   def respond_to_on_destroy
     if request.format.json? 
-      head :no_content
+      render json: { 
+        message: "Logged out successfully",
+        redirect_path: after_sign_out_path_for(resource_name)
+      }, status: :ok
     end
   end
 

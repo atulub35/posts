@@ -17,3 +17,27 @@
 @import "Inter";
 @import "variables";
 @import "bootstrap";
+.highlight {
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+  
+  .highlight pre {
+    margin-bottom: 0;
+    white-space: pre-wrap;
+  }
+  
+  .ai-message {
+    background-color: #f8f9fa;
+    border-radius: 0.375rem;
+  }
+  
+  .ai-message p {
+    margin-bottom: 1rem;
+  }
+  
+  .ai-message p:last-child {
+    margin-bottom: 0;
+  }

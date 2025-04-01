@@ -1,0 +1,3 @@
+
+<% turbo_stream.update @post unless @post.errors.any? %>
+<%= turbo_stream.append "flash-notification", partial: "shared/flash/notification" %>

@@ -3,14 +3,13 @@ class PostsController < ApplicationController
   protect_from_forgery with: :exception, unless: -> { request.format.json? }
   respond_to :html, :json, :turbo_stream
   before_action :authenticate_user!
-  before_action :debug_session
-  before_action :set_post, only: %i[destroy edit update show like repost]
+  before_action :find_post, only: %i[destroy edit update show like repost]
 
   def index
     if params[:query].present?
       @pagy, @posts = pagy(Post.search(params[:query]))
     else
-      @pagy, @posts = pagy(Post.all.order(created_at: :desc))
+      @pagy, @posts = pagy(Post.all.with_rich_text_body.order(created_at: :desc))
     end
   
 
@@ -56,6 +55,8 @@ class PostsController < ApplicationController
       flash.now[:notice] = "Post was successfully updated."
       broadcast_post_update(@post)
       respond_to do |format|
+        format.turbo_stream
+        format.json
         format.html { redirect_to posts_path, notice: 'Post was successfully updated.' }
       end
     else
@@ -108,21 +109,11 @@ class PostsController < ApplicationController
     end
     respond_to do |format|
       format.html { redirect_to posts_path }
+      format.json { head :ok }
     end
   end
 
   private
-
-  def debug_session
-    Rails.logger.info "=== Session Debug Info ==="
-    Rails.logger.info "Request Format: #{request.format}"
-    Rails.logger.info "Session ID: #{session.id}"
-    Rails.logger.info "User Signed In: #{user_signed_in?}"
-    Rails.logger.info "Current User: #{current_user&.id}"
-    Rails.logger.info "Cookies: #{request.cookies.keys}"
-    Rails.logger.info "Headers: #{request.headers['HTTP_COOKIE']}"
-    Rails.logger.info "========================"
-  end
 
   def broadcast_post(post)
     Turbo::StreamsChannel.broadcast_prepend_later_to(
@@ -149,11 +140,11 @@ class PostsController < ApplicationController
     )
   end
 
-  def set_post
+  def find_post
     @post = Post.find(params[:id])
   end
 
   def post_params
-    params.require(:post).permit(:body)
+    params.require(:post).permit(:body, :rich_text_body, :title)
   end
 end

@@ -4,11 +4,11 @@
         <div
             data-action="turbo:submit-end->turbo-modal#submitEnd turbo:submit-start->turbo-modal#submitStart"
             class="modal fade" id="turbo-modal" data-bs-backdrop="static" data-turbo-modal-target="modal" tabindex="-1" aria-labelledby="turbo-modalModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-dialog modal-dialog-centered <%= @modal_size %>">
                 <div class="modal-content bg-body card">
                     <div class="modal-header card-header">
                         <h5 class="modal-title text-body text-truncate w-100" id="turbo-modalModalLabel">
-                            <%= @post&.id.present? ? "Update Post" : "Create Post" %>
+                            <%= @title %>
                         </h5>
                         <button type="button" class="btn-close" data-action="turbo-modal#hideModal"></button>
                     </div>
