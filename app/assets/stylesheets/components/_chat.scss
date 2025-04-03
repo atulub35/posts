@@ -1,0 +1,126 @@
+.chat-card {
+  transition: all 0.3s ease;
+}
+
+.chat-container {
+  background-color: var(--bs-body-bg);
+  transition: background-color 0.3s ease;
+}
+
+.message-bubble {
+  max-width: 80%;
+  padding: 1rem;
+  border-radius: 1rem;
+  position: relative;
+  word-wrap: break-word;
+  transition: all 0.3s ease;
+}
+
+.user-message {
+  background-color: var(--bs-primary);
+  color: white;
+  margin-left: auto;
+  border-bottom-right-radius: 0.25rem;
+}
+
+.ai-message {
+  background-color: var(--bs-body-tertiary);
+  color: var(--bs-body-color);
+  margin-right: auto;
+  border-bottom-left-radius: 0.25rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  border: 1px solid var(--bs-border-color);
+}
+
+.message-time {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  margin-top: 0.25rem;
+}
+
+.chat-input-form .form-control:focus {
+  box-shadow: none;
+  background-color: var(--bs-body-tertiary);
+}
+
+/* Dark mode specific styles */
+[data-bs-theme="dark"] .ai-message {
+  background-color: var(--bs-dark);
+  box-shadow: 0 1px 2px rgba(255,255,255,0.1);
+  border-color: var(--bs-border-color);
+}
+
+[data-bs-theme="dark"] .chat-container {
+  background-color: var(--bs-body-bg);
+}
+
+/* Scrollbar styling */
+.chat-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-container::-webkit-scrollbar-thumb {
+  background: var(--bs-secondary);
+  border-radius: 3px;
+}
+
+.chat-container::-webkit-scrollbar-thumb:hover {
+  background: var(--bs-primary);
+}
+
+/* Message animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message-bubble {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Message wrapper and role styles */
+.message-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.message-wrapper.user {
+  align-items: flex-end;
+}
+
+.message-wrapper.ai {
+  align-items: flex-start;
+}
+
+.message-role {
+  font-size: 0.75rem;
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.message-meta {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+/* Dark mode adjustments */
+[data-bs-theme="dark"] .message-role {
+  color: var(--bs-light);
+}
+
+[data-bs-theme="dark"] .message-meta {
+  color: var(--bs-light);
+}

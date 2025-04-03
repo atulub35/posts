@@ -1,5 +1,23 @@
 <%= turbo_frame_tag dom_id(message) do %>
-    <div class="my-4 <%= message.role == 'user' ? 'user-message p-3 bg-secondary text-white rounded' : 'ai-message' %>">
+  <div class="message-wrapper <%= message.role %>">
+    <div class="message-bubble <%= message.role == 'user' ? 'user-message' : 'ai-message' %>">
+      <div class="message-content">
         <%= message.content %>
+      </div>
+      <div class="message-meta d-flex justify-content-between align-items-center mt-2">
+        <div class="message-role">
+          <% if message.role == 'user' %>
+            <i class="bx bx-user-circle"></i>
+            You
+          <% else %>
+            <i class="bx bx-bot"></i>
+            AI Assistant
+          <% end %>
+        </div>
+        <div class="message-time">
+          <%= message.created_at.strftime("%I:%M %p") %>
+        </div>
+      </div>
     </div>
+  </div>
 <% end %>

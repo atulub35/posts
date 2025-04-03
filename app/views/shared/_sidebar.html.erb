@@ -26,6 +26,12 @@
         <% end %>
         <!-- List of navigation items -->
         <li>
+            <%= link_to root_path, class: "nav-link #{'active' if current_page?(root_path)}", data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Home" } do %>
+                <i class='bx bx-home'></i>
+                <span class="links_name">Home</span>
+            <% end %>
+        </li>
+        <li>
             <%= link_to posts_path, class: "nav-link #{'active' if current_page?(posts_path)}", data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Posts" } do %>
                 <i class='bx bxl-blogger'></i>
                 <span class="links_name">Posts</span>

@@ -1,15 +1,80 @@
-<h1>Generate an AI Image</h1>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-lg">
+        <div class="card-body p-4">
+          <h1 class="text-center mb-4">AI Image Generator</h1>
+          <p class="text-center text-muted mb-4">Transform your imagination into stunning visuals using DALL-E 3</p>
 
-<%= form_with url: images_path, method: :post, data: { turbo_frame: "image_result" } do |form| %>
-  <div>
-    <%= form.label :prompt, "Enter Image Description:" %>
-    <%= form.text_field :prompt, required: true %>
+          <%= form_with url: images_path, 
+              method: :post, 
+              data: { 
+                controller: "image-form",
+                turbo: true,
+                turbo_frame: "image_result"
+              } do |form| %>
+            <div class="mb-4">
+              <%= form.label :prompt, "Describe your image:", class: "form-label" %>
+              <%= form.text_area :prompt, 
+                  required: true, 
+                  class: "form-control",
+                  rows: 3,
+                  placeholder: "Example: A serene Japanese garden with cherry blossoms, digital art style",
+                  data: { image_form_target: "prompt" } %>
+              <div class="form-text">
+                <p class="mb-2">Try these prompts for inspiration:</p>
+                <div class="d-flex flex-wrap gap-2">
+                  <button type="button" class="btn btn-outline-primary btn-sm" data-action="click->image-form#usePrompt" data-prompt="A magical forest at night with glowing mushrooms and fireflies, fantasy art style">Magical Forest</button>
+                  <button type="button" class="btn btn-outline-primary btn-sm" data-action="click->image-form#usePrompt" data-prompt="A futuristic cityscape with flying cars and neon lights, cyberpunk style">Futuristic City</button>
+                  <button type="button" class="btn btn-outline-primary btn-sm" data-action="click->image-form#usePrompt" data-prompt="A peaceful beach sunset with palm trees and gentle waves, watercolor style">Beach Sunset</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <%= form.label :reference_image, "Upload reference image (optional):", class: "form-label" %>
+              <%= form.file_field :reference_image, 
+                  class: "form-control",
+                  accept: "image/*",
+                  data: { image_form_target: "referenceImage" } %>
+              <div class="form-text">Upload an image to influence the style of your generated image</div>
+            </div>
+
+            <div class="text-center">
+              <%= form.submit "Generate Image", 
+                  class: "btn btn-primary btn-lg px-5",
+                  data: { 
+                    image_form_target: "submitButton",
+                    action: "click->image-form#submit"
+                  } %>
+            </div>
+            <turbo-frame id="image_result">
+              <div class="mt-4">
+                <div class="text-center" data-image-form-target="loadingIndicator" style="display: none;">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                  <p class="mt-2">Creating your masterpiece...</p>
+                </div>
+              </div>
+            </turbo-frame>
+          <% end %>
+
+        </div>
+      </div>
+    </div>
   </div>
-  <div>
-    <%= form.submit "Generate Image" %>
-  </div>
+</div>
+
+<%= javascript_tag do %>
+  document.addEventListener('turbo:load', function() {
+    const form = document.querySelector('form');
+    const submitButton = form.querySelector('input[type="submit"]');
+    const loadingIndicator = document.querySelector('[data-image-form-target="loadingIndicator"]');
+
+    form.addEventListener('submit', function() {
+      submitButton.disabled = true;
+      loadingIndicator.style.display = 'block';
+    });
+  });
 <% end %>
-
-<turbo-frame id="image_result">
-  <!-- Image result will be updated dynamically here -->
-</turbo-frame>

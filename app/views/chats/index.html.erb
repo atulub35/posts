@@ -1,26 +1,65 @@
-<h1 class="text-center mt-3 mb-4">Chat with AI 🤖</h1>
+<div class="container-fluid h-100">
+  <div class="row h-100" data-controller="chat-scroll chat-form" 
+             data-action="turbo:submit-end->chat-scroll#messageReceived">
+    <div class="col-12 col-md-8 offset-md-2 h-100 d-flex flex-column my-4">
+      <div class="card flex-grow-1 shadow-sm chat-card">
+        <div class="card-header bg-body border-bottom d-flex justify-content-between align-items-center">
+          <h4 class="mb-0 d-flex align-items-center">
+            <i class="bx bx-bot me-2"></i>
+            AI Support Assistant
+          </h4>
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-success d-flex align-items-center gap-1">
+              <i class="bx bx-check-circle"></i>
+              Connected
+            </span>
+          </div>
+        </div>
+        
+        <div class="card-body chat-container p-3" 
+             style="height: calc(100vh - 250px); overflow-y: auto;"
+             data-chat-form-target="container"
+             data-chat-scroll-target="container">
+          <%= turbo_frame_tag "chat-messages" do %>
+            <div class="d-flex flex-column gap-3"  data-chat-form-target="messages">
+              <% if current_user.messages.present? %>
+                <%= render partial: "message", collection: @chats, as: :message %>
+              <% else %>
+                <div class="text-center text-muted py-5">
+                  <i class="bx bx-message-square-detail display-4 mb-3"></i>
+                  <p class="mb-0">Start a conversation with the AI Assistant</p>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
 
-<div id="chat-container" class="container pb-4">
-    <div id="chat-container" class="mb-3">
-    <% if current_user.messages.present? %>
-        <%= render partial: "message", collection: @chats, as: :message %>
-    <% end %>
+        <div class="card-footer bg-body border-top p-3">
+          <%= form_with url: ask_chats_path, 
+                        method: :post, 
+                        data: { 
+                          chat_form_target: "form",
+                          turbo_frame: "chat-messages"
+                        }, 
+                        class: "chat-input-form" do |f| %>
+            <div class="input-group">
+              <%= f.text_area :message, 
+                  placeholder: "Type your message...", 
+                  class: "form-control border-0 bg-body-tertiary rounded-start-pill ps-4", 
+                  rows: 1,
+                  style: "resize: none;",
+                  data: { 
+                    chat_form_target: "input",
+                    controller: "",
+                    action: "keydown->textarea-autogrow#resize"
+                  } %>
+              <button data-action="chat-form#submit" class="btn btn-primary rounded-end-pill px-4">
+                <i class="bx bx-send"></i>
+              </button>
+            </div>
+          <% end %>
+        </div>
+      </div>
     </div>
-    <turbo-frame id="chat-messages">
-
-        <!-- Chat messages will be inserted here -->
-    </turbo-frame>
-    <div data-controller="modal-form" data-action="turbo:submit-start->modal-form#onSubmitStart turbo:submit-end->modal-form#onSubmitEnd">
-            <%= form_with url: ask_chats_path, method: :post, data: { turbo_frame: "chat-messages", modal_form_target: "form" }, class: "form-control rounded-3 ai-form p-2" do |f| %>
-                    <div class="form-floating">
-                        <%= f.text_area :message, placeholder: "Ask anything...", required: true, style: "100px", class: "p-3 w-100 border-0" %>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center gap-3 mt-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-image"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                        <button type="submit" class="btn btn-primary d-flex gap-2 align-items-center" data-modal-form-target="button">
-                            Send
-                        </button>
-                    </div>
-            <% end %>
-    </div>
+  </div>
 </div>
