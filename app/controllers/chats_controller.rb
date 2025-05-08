@@ -9,7 +9,12 @@ class ChatsController < ApplicationController
   before_action :verify_api_key
 
   def index
-    @chats = current_user.messages.order(created_at: :asc)
+    @messages = current_user.messages.order(created_at: :asc)
+    
+    respond_to do |format|
+      format.html
+      format.json { render json: @messages }
+    end
   end
 
   def create
@@ -19,6 +24,16 @@ class ChatsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to chats_path }
+      format.json { render json: @chat }
+    end
+  end
+
+  def destroy
+    current_user.messages.destroy_all
+    
+    respond_to do |format|
+      format.html { redirect_to chats_path, notice: 'Chat history cleared successfully' }
+      format.json { head :no_content }
     end
   end
 
@@ -45,6 +60,13 @@ class ChatsController < ApplicationController
   
     respond_to do |format|
       format.turbo_stream
+      format.json { 
+        render json: {
+          ai_response: @ai_response,
+          token_usage: @token_usage,
+          message: @message
+        }
+      }
     end
   rescue OpenAI::Error => e
     Rails.logger.error "OpenAI API Error: #{e.message}"
@@ -66,7 +88,7 @@ class ChatsController < ApplicationController
     end
 
     @openai_client = OpenAI::Client.new(access_token: api_key)
-  rescue StandardError => e
+  rescue => e
     Rails.logger.error "Failed to setup OpenAI client: #{e.message}"
     @error_message = "Failed to initialize AI service. Please check your configuration."
     respond_to do |format|

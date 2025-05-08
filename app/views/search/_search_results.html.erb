@@ -1,0 +1,83 @@
+<% if query.present? %>
+  <!-- Posts Section -->
+  <% if posts.any? %>
+    <div class="mb-5">
+      <h3 class="h4 mb-3">Posts</h3>
+      <div class="row">
+        <% posts.each do |post| %>
+          <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title"><%= link_to post.title, post_path(post), class: "text-decoration-none" %></h5>
+                <p class="card-text text-muted"><%= truncate(post.content, length: 150) %></p>
+                <small class="text-muted">Posted <%= time_ago_in_words(post.created_at) %> ago</small>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Users Section -->
+  <% if users.any? %>
+    <div class="mb-5">
+      <h3 class="h4 mb-3">Users</h3>
+      <div class="row">
+        <% users.each do |user| %>
+          <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <div class="d-flex align-items-center">
+                  <% if user.avatar.attached? %>
+                    <%= image_tag user.avatar, class: "rounded-circle me-3", style: "width: 48px; height: 48px; object-fit: cover;" %>
+                  <% else %>
+                    <div class="rounded-circle bg-secondary me-3" style="width: 48px; height: 48px;"></div>
+                  <% end %>
+                  <div>
+                    <h5 class="card-title mb-0"><%= link_to user.username, profiles_show_path(user), class: "text-decoration-none" %></h5>
+                    <small class="text-muted"><%= user.email %></small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Images Section -->
+  <% if images.any? %>
+    <div class="mb-5">
+      <h3 class="h4 mb-3">Images</h3>
+      <div class="row">
+        <% images.each do |image| %>
+          <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+              <% if image.image.attached? %>
+                <%= image_tag image.image, class: "card-img-top", style: "height: 200px; object-fit: cover;" %>
+              <% end %>
+              <div class="card-body">
+                <h5 class="card-title"><%= link_to image.title, image_path(image), class: "text-decoration-none" %></h5>
+                <p class="card-text text-muted"><%= truncate(image.description, length: 100) %></p>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <% if posts.empty? && users.empty? && images.empty? %>
+    <div class="text-center py-5">
+      <h3 class="h4 text-muted">No results found</h3>
+      <p class="text-muted">Try different keywords or check out our suggestions</p>
+    </div>
+  <% end %>
+<% else %>
+  <div class="text-center py-5">
+    <h3 class="h4 text-muted">Start searching</h3>
+    <p class="text-muted">Enter keywords to find posts, users, or images</p>
+  </div>
+<% end %> 

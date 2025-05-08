@@ -7,6 +7,7 @@ class User < ApplicationRecord
   has_many :posts
   has_many :messages
   has_one_attached :avatar
+  has_many :images, dependent: :destroy
   validate :correct_avatar_mime_type
 
   # Validation (Optional)
