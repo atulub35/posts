@@ -6,13 +6,29 @@ class User < ApplicationRecord
     :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
   has_many :posts
   has_many :messages
+  has_many :ai_messages, -> { ai_chat }, class_name: 'Message'
+  has_many :user_messages, -> { user_chat }, class_name: 'Message'
+  has_many :conversation_participants
+  has_many :conversations, through: :conversation_participants
   has_one_attached :avatar
   has_many :images, dependent: :destroy
   validate :correct_avatar_mime_type
 
-  # Validation (Optional)
-  # validates :avatar, content_type: [:png, :jpg, :jpeg],
-  #                    size: { less_than: 5.megabytes , message: 'is not given between size' }
+  def avatar_thumbnail
+    return nil unless avatar.attached?
+    avatar.variant(resize_to_fill: [48, 48]).processed
+  end
+
+  def avatar_small
+    return nil unless avatar.attached?
+    avatar.variant(resize_to_fill: [32, 32]).processed
+  end
+
+  def avatar_mini
+    return nil unless avatar.attached?
+    avatar.variant(resize_to_fill: [24, 24]).processed
+  end
+
   private 
   
   def correct_avatar_mime_type

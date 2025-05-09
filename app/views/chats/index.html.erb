@@ -23,7 +23,7 @@
           <%= turbo_frame_tag "chat-messages" do %>
             <div class="d-flex flex-column gap-3"  data-chat-form-target="messages">
               <% if current_user.messages.present? %>
-                <%= render partial: "message", collection: @chats, as: :message %>
+                <%= render partial: "message", collection: @messages, as: :message %>
               <% else %>
                 <div class="text-center text-muted py-5">
                   <i class="bx bx-message-square-detail display-4 mb-3"></i>

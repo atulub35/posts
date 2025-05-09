@@ -1,0 +1,90 @@
+<div class="container-fluid h-100">
+  <%= turbo_stream_from @conversation %>
+  <div class="row h-100" data-controller="chat-scroll chat-form" 
+             data-current-user-id="<%= @current_user_id %>"
+             data-action="turbo:submit-end->chat-scroll#messageReceived turbo:before-stream-render->chat-scroll#messageReceived">
+    <div class="col-12 col-md-8 offset-md-2 h-100 d-flex flex-column my-4">
+      <div class="card flex-grow-1 shadow-sm chat-card">
+        <div class="card-header bg-body border-bottom d-flex justify-content-between align-items-center">
+          <h4 class="mb-0 d-flex align-items-center">
+            <% if @other_user&.avatar&.attached? %>
+              <%= image_tag @other_user.avatar_small, class: "rounded-circle me-2", style: "width: 32px; height: 32px; object-fit: cover;" %>
+            <% else %>
+              <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                <i class="bx bx-user text-white"></i>
+              </div>
+            <% end %>
+            <%= @other_user&.name || @other_user&.email %>
+          </h4>
+        </div>
+        
+        <div class="card-body chat-container p-3" 
+             style="height: calc(100vh - 250px); overflow-y: auto;"
+             data-chat-form-target="container"
+             data-chat-scroll-target="container">
+          <%= turbo_frame_tag "messages" do %>
+            <div id="messages_container" class="d-flex flex-column gap-3" data-chat-form-target="messages">
+              <% if @messages.any? %>
+                <% @messages.each do |message| %>
+                  <div class="message" data-message-id="<%= message.id %>" data-sender-id="<%= message.user_id %>" data-chat-scroll-target="message">
+                    <div class="message-content rounded-3 p-3" data-sender="<%= message.user_id %>">
+                      <div class="d-flex align-items-center mb-1">
+                        <% if message.user && message.user.avatar.attached? %>
+                          <%= image_tag message.user.avatar_mini, class: "rounded-circle me-2", style: "width: 24px; height: 24px; object-fit: cover;" %>
+                        <% else %>
+                          <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-2" style="width: 24px; height: 24px;">
+                            <i class="bx bx-user text-white"></i>
+                          </div>
+                        <% end %>
+                        <small>
+                          <%= message.user ? (message.user.name || message.user.email) : "Unknown User" %>
+                        </small>
+                      </div>
+                      <p class="mb-0"><%= message.content %></p>
+                      <small>
+                        <%= time_ago_in_words(message.created_at) %> ago
+                      </small>
+                    </div>
+                  </div>
+                <% end %>
+              <% else %>
+                <div class="text-center text-muted py-5">
+                  <i class="bx bx-message-square-detail display-4 mb-3"></i>
+                  <p class="mb-0">No messages yet</p>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="card-footer bg-body border-top p-3">
+          <%= form_with model: [@conversation, @message], 
+                        id: dom_id(@conversation, 'message_form'),
+                        data: { 
+                          chat_form_target: "form",
+                          turbo_frame: "messages",
+                          turbo: true
+                        }, 
+                        class: "chat-input-form" do |f| %>
+            <div class="input-group">
+              <%= f.hidden_field :role, value: 'user' %>
+              <%= f.text_area :content, 
+                  placeholder: "Type your message...", 
+                  class: "form-control border-0 bg-body-tertiary rounded-start-pill ps-4", 
+                  rows: 1,
+                  style: "resize: none;",
+                  data: { 
+                    chat_form_target: "input",
+                    controller: "textarea-autogrow",
+                    action: "keydown->textarea-autogrow#resize"
+                  } %>
+              <button data-action="chat-form#submit" class="btn btn-primary rounded-end-pill px-4">
+                <i class="bx bx-send"></i>
+              </button>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

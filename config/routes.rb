@@ -27,6 +27,9 @@ Rails.application.routes.draw do
   end
   resources :images, only: [:index, :new, :create]
 
+  resources :conversations, only: [:index, :show, :create] do
+    resources :messages, only: [:create]
+  end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

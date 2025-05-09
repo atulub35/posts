@@ -1,0 +1,49 @@
+<% if @message.errors.any? %>
+  <%= turbo_stream.replace "flash-notification" do %>
+    <%= render partial: "shared/flash/notification" %>
+  <% end %>
+  
+  <% if @message.errors[:role].any? %>
+    <% # Clear the form errors by replacing it with a blank form %>
+    <%= turbo_stream.replace dom_id(@conversation, 'message_form') do %>
+      <%= form_with model: [@conversation, Message.new], 
+                  id: dom_id(@conversation, 'message_form'),
+                  data: { 
+                    chat_form_target: "form",
+                    turbo_frame: "messages",
+                    turbo: true
+                  }, 
+                  class: "chat-input-form" do |f| %>
+        <div class="input-group">
+          <%= f.hidden_field :role, value: 'user' %>
+          <%= f.text_area :content, 
+              placeholder: "Type your message...", 
+              class: "form-control border-0 bg-body-tertiary rounded-start-pill ps-4", 
+              rows: 1,
+              style: "resize: none;",
+              data: { 
+                chat_form_target: "input",
+                controller: "textarea-autogrow",
+                action: "keydown->textarea-autogrow#resize"
+              } %>
+          <button data-action="chat-form#submit" class="btn btn-primary rounded-end-pill px-4">
+            <i class="bx bx-send"></i>
+          </button>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+<% else %>
+  <%= turbo_stream.append "messages" do %>
+    <%= render partial: "messages/message_stream", locals: { 
+      message: @message, 
+      user_id: @user_id
+    } %>
+  <% end %>
+
+  <% if flash.any? %>
+    <%= turbo_stream.replace "flash-notification" do %>
+      <%= render partial: "shared/flash/notification" %>
+    <% end %>
+  <% end %>
+<% end %> 

@@ -9,7 +9,8 @@ class ChatsController < ApplicationController
   before_action :verify_api_key
 
   def index
-    @messages = current_user.messages.order(created_at: :asc)
+    @messages = current_user.ai_messages.order(created_at: :asc)
+    @message = Message.new(role: 'user')
     
     respond_to do |format|
       format.html
@@ -29,7 +30,7 @@ class ChatsController < ApplicationController
   end
 
   def destroy
-    current_user.messages.destroy_all
+    current_user.ai_messages.destroy_all
     
     respond_to do |format|
       format.html { redirect_to chats_path, notice: 'Chat history cleared successfully' }
@@ -40,7 +41,7 @@ class ChatsController < ApplicationController
   def ask
     # Store user's message in DB
     user_message = current_user.messages.create!(role: "user", content: params[:message])
-  
+   
     response = @openai_client.chat(
       parameters: {
         model: "gpt-3.5-turbo",
@@ -50,14 +51,14 @@ class ChatsController < ApplicationController
         max_tokens: 100
       }
     )
-  
+   
     ai_response = response.dig("choices", 0, "message", "content")
-  
+   
     # Store AI's response in DB
-    @message = current_user.messages.create!(role: "ai", content: ai_response)
+    @message = current_user.messages.create!(role: "assistant", content: ai_response)
     @ai_response = ai_response
     @token_usage = response.dig("usage")
-  
+   
     respond_to do |format|
       format.turbo_stream
       format.json { 
@@ -131,5 +132,9 @@ class ChatsController < ApplicationController
   rescue OpenAI::Error => e
     Rails.logger.error "OpenAI API Error: #{e.message}"
     "Sorry, I couldn't process that request."
+  end
+
+  def message_params
+    params.require(:message).permit(:content)
   end
 end

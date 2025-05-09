@@ -1,0 +1,20 @@
+<div class="message <%= message.user == current_user ? 'message-sent' : 'message-received' %>" data-sender-id="<%= message.user.id %>" data-chat-scroll-target="message">
+  <div class="message-content <%= message.user == current_user ? 'bg-primary text-white' : 'bg-body-tertiary' %> rounded-3 p-3">
+    <div class="d-flex align-items-center mb-1">
+      <% if message.user.avatar.attached? %>
+        <%= image_tag message.user.avatar_mini, class: "rounded-circle me-2", style: "width: 24px; height: 24px; object-fit: cover;" %>
+      <% else %>
+        <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-2" style="width: 24px; height: 24px;">
+          <i class="bx bx-user text-white"></i>
+        </div>
+      <% end %>
+      <small class="<%= message.user == current_user ? 'text-white-50' : 'text-muted' %>">
+        <%= message.user.name || message.user.email %>
+      </small>
+    </div>
+    <p class="mb-0"><%= message.content %></p>
+    <small class="<%= message.user == current_user ? 'text-white-50' : 'text-muted' %>">
+      <%= time_ago_in_words(message.created_at) %> ago
+    </small>
+  </div>
+</div>

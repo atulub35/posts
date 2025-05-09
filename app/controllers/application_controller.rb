@@ -29,7 +29,24 @@ class ApplicationController < ActionController::Base
       respond_to do |format|
         format.html { redirect_to new_user_session_path, notice: 'You need to sign in first!' }
         format.json { render json: { error: 'Unauthorized', message: 'You need to sign in first' }, status: :unauthorized }
+        format.turbo_stream { 
+          flash.now[:alert] = 'You need to sign in first!'
+          render turbo_stream: turbo_stream.replace(
+            "flash-notification", 
+            partial: "shared/flash/notification", 
+            locals: { flash: flash }
+          )
+        }
       end
+    end
+  end
+
+  # Safer check for Turbo Frames
+  def turbo_user_signed_in?
+    begin
+      user_signed_in?
+    rescue => e
+      false
     end
   end
 end

@@ -41,3 +41,48 @@
   .ai-message p:last-child {
     margin-bottom: 0;
   }
+
+/* Toast Notification Styles */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  max-width: 350px;
+  z-index: 1080;
+}
+
+.toast {
+  opacity: 0;
+  transition: all 0.3s ease-in-out, opacity 0.3s linear !important;
+  transform-origin: top right;
+}
+
+.toast.show {
+  opacity: 1;
+}
+
+.toast.hide {
+  display: block;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.toaster {
+  margin-bottom: 0.75rem;
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+}
+
+/* Chat message scroll improvements */
+.chat-container {
+  scroll-behavior: smooth !important;
+  overflow-y: auto;
+}
+
+.message {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

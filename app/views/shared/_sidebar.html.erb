@@ -41,8 +41,14 @@
         
         <li>
             <%= link_to chats_index_path, data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Chats" }, class: "nav-link #{'active' if current_page?(chats_index_path)}" do %>
-                <i class='bx bx-chat'></i>
-                <span class="links_name">Chats</span>
+                <i class='bx bx-message-square-dots'></i>
+                <span class="links_name">AI Chats</span>
+            <% end %>
+        </li>
+        <li>
+            <%= link_to conversations_path, data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Chats" }, class: "nav-link #{'active' if current_page?(conversations_path)}" do %>
+                <i class='bx bx-user-circle'></i>
+                <span class="links_name">User Chats</span>
             <% end %>
         </li>
         <li>

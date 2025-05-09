@@ -1,0 +1,41 @@
+.message {
+  max-width: 75%;
+  margin-bottom: 1rem;
+  display: flex;
+}
+
+.message-sent {
+  margin-left: auto;
+  justify-content: flex-end;
+}
+
+.message-received {
+  margin-right: auto;
+  justify-content: flex-start;
+}
+
+.message-content {
+  position: relative;
+  word-wrap: break-word;
+  border-radius: 1rem !important;
+}
+
+/* Special styling for sent messages */
+.message-sent .message-content {
+  border-bottom-right-radius: 0.25rem !important;
+}
+
+/* Special styling for received messages */
+.message-received .message-content {
+  border-bottom-left-radius: 0.25rem !important;
+}
+
+.chat-container {
+  scroll-behavior: smooth;
+}
+
+.chat-input-form textarea {
+  min-height: 38px;
+  max-height: 120px;
+  overflow-y: auto;
+}
