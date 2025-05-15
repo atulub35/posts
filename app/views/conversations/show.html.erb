@@ -1,14 +1,25 @@
 <div class="container-fluid h-100">
   <%= turbo_stream_from @conversation %>
-  <div class="row h-100" data-controller="chat-scroll chat-form" 
+  <div class="row h-100" data-controller="chat-scroll chat-form user-presence" 
              data-current-user-id="<%= @current_user_id %>"
+             data-user-presence-conversation-id-value="<%= @conversation.id %>"
+             data-user-presence-other-user-id-value="<%= @other_user&.id %>"
              data-action="turbo:submit-end->chat-scroll#messageReceived turbo:before-stream-render->chat-scroll#messageReceived">
-    <div class="col-12 col-md-8 offset-md-2 h-100 d-flex flex-column my-4">
+    <div class="col-12 col-md-12 h-100 d-flex flex-column my-4">
       <div class="card flex-grow-1 shadow-sm chat-card">
         <div class="card-header bg-body border-bottom d-flex justify-content-between align-items-center">
           <h4 class="mb-0 d-flex align-items-center">
-            <% if @other_user&.avatar&.attached? %>
-              <%= image_tag @other_user.avatar_small, class: "rounded-circle me-2", style: "width: 32px; height: 32px; object-fit: cover;" %>
+            <% if @other_user %>
+              <div 
+                data-controller="user-avatar" 
+                data-user-avatar-user-id-value="<%= @other_user.id %>" 
+                data-user-avatar-size-value="32"
+                data-initials="<%= @other_user.name&.first&.upcase || @other_user.email.first.upcase %>"
+                class="me-2">
+                <div data-user-avatar-target="placeholder" class="rounded-circle bg-secondary d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                  <i class="bx bx-user text-white"></i>
+                </div>
+              </div>
             <% else %>
               <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
                 <i class="bx bx-user text-white"></i>
@@ -16,34 +27,67 @@
             <% end %>
             <%= @other_user&.name || @other_user&.email %>
           </h4>
+          <%= render partial: "user_statuses/status", locals: { user: @other_user } %>
         </div>
         
         <div class="card-body chat-container p-3" 
              style="height: calc(100vh - 250px); overflow-y: auto;"
              data-chat-form-target="container"
              data-chat-scroll-target="container">
-          <%= turbo_frame_tag "messages" do %>
+          <%= turbo_frame_tag "messages", data: { current_user_id: @current_user_id } do %>
             <div id="messages_container" class="d-flex flex-column gap-3" data-chat-form-target="messages">
               <% if @messages.any? %>
                 <% @messages.each do |message| %>
-                  <div class="message" data-message-id="<%= message.id %>" data-sender-id="<%= message.user_id %>" data-chat-scroll-target="message">
-                    <div class="message-content rounded-3 p-3" data-sender="<%= message.user_id %>">
-                      <div class="d-flex align-items-center mb-1">
-                        <% if message.user && message.user.avatar.attached? %>
-                          <%= image_tag message.user.avatar_mini, class: "rounded-circle me-2", style: "width: 24px; height: 24px; object-fit: cover;" %>
-                        <% else %>
-                          <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-2" style="width: 24px; height: 24px;">
-                            <i class="bx bx-user text-white"></i>
+                  <div class="message-wrapper <%= message.user == current_user ? 'user' : 'ai' %>" 
+                       id="<%= dom_id(message) %>"
+                       data-user-id="<%= message.user_id %>"
+                       data-chat-scroll-target="message">
+                    <div class="message-bubble <%= message.user == current_user ? 'user-message' : 'ai-message' %>">
+                      <div class="message-content">
+                        <%= message.content %>
+                        
+                        <% if message.image.attached? %>
+                          <div data-controller="s3-image" 
+                               data-s3-image-message-id-value="<%= message.id %>"
+                               class="mt-2">
+                            <div data-s3-image-target="placeholder" class="bg-light rounded p-3 d-flex flex-column align-items-center justify-content-center" style="min-height: 120px; width: 100%;">
+                              <div class="spinner-border text-primary mb-2" role="status" style="width: 1.5rem; height: 1.5rem;">
+                                <span class="visually-hidden">Loading...</span>
+                              </div>
+                              <div class="text-center">
+                                <small class="text-muted d-block"><%= message.image.filename.to_s %></small>
+                                <small class="text-muted d-block">
+                                  <%= number_to_human_size(message.image.byte_size) %>
+                                </small>
+                              </div>
+                            </div>
                           </div>
                         <% end %>
-                        <small>
-                          <%= message.user ? (message.user.name || message.user.email) : "Unknown User" %>
-                        </small>
                       </div>
-                      <p class="mb-0"><%= message.content %></p>
-                      <small>
-                        <%= time_ago_in_words(message.created_at) %> ago
-                      </small>
+                      <div class="message-meta d-flex justify-content-between align-items-center mt-2">
+                        <div class="message-role">
+                          <% if message.user == current_user %>
+                            <i class="bx bx-user-circle"></i>
+                            You
+                          <% else %>
+                            <i class="bx bx-user"></i>
+                            <%= message.user ? (message.user.name || message.user.email) : "Unknown User" %>
+                          <% end %>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                          <div class="message-time">
+                            <%= message.created_at.strftime("%I:%M %p") %>
+                          </div>
+                          <% if message.user == current_user %>
+                            <%= button_to conversation_message_path(@conversation, message), 
+                                method: :delete,
+                                form: { data: { turbo_confirm: "Delete this message?" } },
+                                class: "btn btn-sm btn-link text-danger p-0 d-flex align-items-center" do %>
+                              <i class="bx bx-trash-alt"></i>
+                            <% end %>
+                          <% end %>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 <% end %>
@@ -78,13 +122,44 @@
                     controller: "textarea-autogrow",
                     action: "keydown->textarea-autogrow#resize"
                   } %>
+              <label class="btn btn-light rounded-0 d-flex align-items-center justify-content-center px-3" title="Add image">
+                <i class="bx bx-image"></i>
+                <%= f.file_field :image, 
+                    class: "d-none", 
+                    accept: "image/png,image/gif,image/jpeg", 
+                    data: { chat_form_target: "imageInput" } %>
+              </label>
               <button data-action="chat-form#submit" class="btn btn-primary rounded-end-pill px-4">
                 <i class="bx bx-send"></i>
               </button>
+            </div>
+            <div class="image-preview mt-2 d-none" data-chat-form-target="imagePreview">
+              <div class="position-relative d-inline-block">
+                <img src="" class="rounded" style="max-height: 100px; max-width: 200px;" data-chat-form-target="previewImage">
+                <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 rounded-circle" style="margin-top: -10px; margin-right: -10px;" data-action="chat-form#removeImage">
+                  <i class="bx bx-x"></i>
+                </button>
+              </div>
             </div>
           <% end %>
         </div>
       </div>
     </div>
+    <!-- Hidden presence form -->
+    <%= form_with url: publish_user_statuses_path, 
+                  id: "presence_form", 
+                  method: :post,
+                  local: false,
+                  style: "display: none;",
+                  data: { 
+                    user_presence_target: "form",
+                    turbo: true,
+                    turbo_frame: "_top"
+                  } do |f| %>
+      <%= f.hidden_field :status, value: "online", data: { user_presence_target: "statusField" } %>
+      <%= f.hidden_field :conversation_id, value: @conversation.id %>
+      <%= f.hidden_field :authenticity_token, value: form_authenticity_token %>
+    <% end %>
   </div>
+  
 </div> 

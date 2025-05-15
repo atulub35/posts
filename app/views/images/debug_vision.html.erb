@@ -1,0 +1,31 @@
+<div class="container py-5">
+  <h1 class="mb-4">Debug OpenAI Vision API</h1>
+  
+  <div class="alert alert-info">
+    This is a debug page to test the OpenAI Vision API capabilities separately from DALL-E.
+  </div>
+  
+  <%= form_with url: debug_vision_images_path, method: :post, local: true, html: { multipart: true, class: "mb-4" } do |form| %>
+    <div class="mb-3">
+      <%= form.label :house_image, "Upload Test Image", class: "form-label" %>
+      <%= form.file_field :house_image, class: "form-control", accept: "image/*", required: true %>
+      <div class="form-text">Upload any image to test the vision API</div>
+    </div>
+    
+    <div class="mb-3">
+      <%= form.submit "Test Vision API", class: "btn btn-primary" %>
+      <%= link_to "Back", images_path, class: "btn btn-outline-secondary ms-2" %>
+    </div>
+  <% end %>
+  
+  <div class="card mt-4">
+    <div class="card-header">
+      <h5 class="card-title mb-0">API Information</h5>
+    </div>
+    <div class="card-body">
+      <p><strong>Model:</strong> gpt-4o</p>
+      <p><strong>API Key:</strong> <%= ENV["OPENAI_API_KEY"].present? ? "Present (#{ENV["OPENAI_API_KEY"][0..5]}...)" : "Missing" %></p>
+      <p><strong>Organization ID:</strong> <%= ENV["OPENAI_ORGANIZATION_ID"].present? ? "Present (#{ENV["OPENAI_ORGANIZATION_ID"][0..5]}...)" : "Missing" %></p>
+    </div>
+  </div>
+</div> 

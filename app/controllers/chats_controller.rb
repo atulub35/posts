@@ -88,7 +88,7 @@ class ChatsController < ApplicationController
       raise "OpenAI API Key is not configured"
     end
 
-    @openai_client = OpenAI::Client.new(access_token: api_key)
+    @openai_client = OpenAI::Client.new
   rescue => e
     Rails.logger.error "Failed to setup OpenAI client: #{e.message}"
     @error_message = "Failed to initialize AI service. Please check your configuration."

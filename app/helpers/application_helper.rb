@@ -64,4 +64,40 @@ module ApplicationHelper
     class_name = "#{component_name}::#{component_name}Component"
     render class_name.constantize.new(**kwargs), &block
   end
+
+  # Generate S3 presigned URL for Active Storage attachments
+  def s3_presigned_url(blob, expires_in: 30.minutes)
+    if Rails.application.config.active_storage.service == :amazon && blob.present?
+      s3_client = Aws::S3::Client.new(
+        region: ENV['AWS_REGION'],
+        credentials: Aws::Credentials.new(ENV['AWS_ACCESS_KEY_ID'], ENV['AWS_SECRET_ACCESS_KEY'])
+      )
+      signer = Aws::S3::Presigner.new(client: s3_client)
+      
+      signer.presigned_url(
+        :get_object, 
+        bucket: ENV['AWS_BUCKET'],
+        key: blob.key,
+        expires_in: expires_in.to_i
+      )
+    else
+      url_for(blob)
+    end
+  rescue StandardError => e
+    Rails.logger.error "Failed to generate presigned URL: #{e.message}"
+    url_for(blob)
+  end
+  
+  # Helper to get blob metadata for client-side handling
+  def blob_metadata(blob)
+    return {} unless blob.present?
+    
+    {
+      filename: blob.filename.to_s,
+      content_type: blob.content_type,
+      byte_size: blob.byte_size,
+      key: blob.key,
+      direct_upload_url: blob.service_url
+    }
+  end
 end

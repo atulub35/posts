@@ -1,0 +1,22 @@
+<div id="user_status_<%= user.id %>" class="d-flex align-items-center gap-2">
+  <% if user.online? %>
+    <span class="badge bg-success d-flex align-items-center gap-1">
+      <i class="bx bx-check-circle"></i>
+      Online
+    </span>
+  <% elsif user.last_seen_at && user.last_seen_at > 2.minutes.ago %>
+    <span class="badge bg-warning d-flex align-items-center gap-1">
+      <i class="bx bx-time"></i>
+      Away
+    </span>
+  <% else %>
+    <span class="badge bg-secondary d-flex align-items-center gap-1">
+      <i class="bx bx-time-five"></i>
+      <% if user.last_seen_at %>
+        Last seen <%= time_ago_in_words(user.last_seen_at) %> ago
+      <% else %>
+        Offline
+      <% end %>
+    </span>
+  <% end %>
+</div> 

@@ -1,0 +1,26 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS (and SCSS, if configured) file within this directory, or any subdirectory
+ * directory with a name that matches the format: [name].[format] (e.g. "admin.scss")
+ * of it, is going to be put into a single file in the compiled version.
+ *
+ * To import a CSS file, select it with the @import directive:
+ *
+ *= require_tree .
+ *= require_self
+ */
+ 
+/* Data saving mode styles */
+html[data-saving-mode="true"] .data-heavy-content {
+  display: none;
+}
+
+html[data-saving-mode="true"] .data-saving-indicator {
+  display: block;
+}
+
+.data-saving-indicator {
+  display: none;
+} 

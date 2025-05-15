@@ -32,9 +32,50 @@
                                 <%= f.label :name, class: "form-label fs-6" %>
                                 <%= f.text_field :name, readonly: show, autofocus: true, class: "form-control fw-light #{"border-transparent" if show}" %>
                             </div>
-                            <div class="col-12 col-sm-6 mb-3">
-                                <%= f.label :avatar, class: "form-label fs-6" %>
-                                <%= f.file_field :avatar, readonly: show, class: "form-control fw-light #{"border-transparent" if show}" %>
+                            
+                            <div class="col-12 col-sm-6 mb-3" data-controller="avatar-preview">
+                                <div class="mb-2 text-center">
+                                    <% if @user.avatar.attached? %>
+                                        <div 
+                                           data-controller="user-avatar" 
+                                           data-user-avatar-user-id-value="<%= @user.id %>" 
+                                           data-user-avatar-size-value="100"
+                                           data-initials="<%= @user.name&.first&.upcase || @user.email.first.upcase %>"
+                                           class="mx-auto">
+                                            <div data-user-avatar-target="placeholder" class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mx-auto" style="width: 100px; height: 100px;">
+                                                <div class="spinner-border text-primary" role="status">
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <% else %>
+                                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto" style="width: 100px; height: 100px; font-size: 2rem;">
+                                            <%= @user.name&.first&.upcase || @user.email.first.upcase %>
+                                        </div>
+                                    <% end %>
+                                </div>
+                                
+                                <% unless show %>
+                                    <div class="mb-3">
+                                        <%= f.label :avatar, class: "form-label fs-6" %>
+                                        <%= f.file_field :avatar, 
+                                            class: "form-control fw-light", 
+                                            accept: "image/png,image/jpeg,image/jpg",
+                                            data: { 
+                                                action: "change->avatar-preview#previewAvatar",
+                                                avatar_preview_target: "input" 
+                                            } 
+                                        %>
+                                        <div class="form-text">Upload a profile picture (PNG, JPG formats only)</div>
+                                    </div>
+                                    
+                                    <% if @user.avatar.attached? %>
+                                    <div class="form-check mb-3">
+                                        <%= f.check_box :remove_avatar, class: "form-check-input" %>
+                                        <%= f.label :remove_avatar, 'Remove current avatar', class: "form-check-label" %>
+                                    </div>
+                                    <% end %>
+                                <% end %>
                             </div>
 
                             <div class="col-12 col-sm-6 mb-3">
@@ -56,12 +97,6 @@
                                 <%#= f.text_field :timezone, readonly: show, class: "form-control fw-light #{"border-transparent" if show}" %>
                                 <%#= f.time_zone_select :timezone, ActiveSupport::TimeZone.us_zones, {:class => 'form-control fw-light #{"border-transparent" if show}'} %>
                                 <%= f.time_zone_select :timezone, ActiveSupport::TimeZone.us_zones, {}, disabled: show, class: "form-select fw-light #{"border-transparent" if show}" %>
-
-                            </div>
-
-                            <div class="col-12 col-sm-6 mb-3">
-                                <%#= f.check_box :remove_avatar %>
-                                <%#= f.label :remove_avatar, 'Remove avatar' %>
                             </div>
                         </div>
                     </div>

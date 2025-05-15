@@ -1,0 +1,7 @@
+<%= turbo_stream.update "main_content" do %>
+  <%= render partial: "images/variant_result", locals: { 
+    image_url: @image_url, 
+    original_image_data: @original_image_data, 
+    analysis: @analysis 
+  } %>
+<% end %> 

@@ -32,6 +32,25 @@
                 <span class="links_name">Posts</span>
             <% end %>
         </li>
+        
+        <li>
+            <%= link_to chats_index_path, data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "AI Chat" }, class: "nav-link #{'active' if current_page?(chats_index_path)}" do %>
+                <i class='bx bx-message-square-dots'></i>
+                <span class="links_name">AI Chat</span>
+            <% end %>
+        </li>
+        <li>
+            <%= link_to conversations_path, data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Conversations" }, class: "nav-link #{'active' if current_page?(conversations_path)}" do %>
+                <i class='bx bx-user-circle'></i>
+                <span class="links_name">Conversations</span>
+            <% end %>
+        </li>
+        <li>
+            <%= link_to images_path, data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Images" }, class: "nav-link #{'active' if current_page?(images_path)}" do %>
+                <i class='bx bx-image-alt'></i>
+                <span class="links_name">Images</span>
+            <% end %>
+        </li>
         <li>
             <%= link_to profiles_show_path, data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Profile" }, class: "nav-link #{'active' if current_page?(profiles_show_path)}" do %>
                 <i class='bx bx-user'></i>
@@ -39,24 +58,6 @@
             <% end %>
         </li>
         
-        <li>
-            <%= link_to chats_index_path, data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Chats" }, class: "nav-link #{'active' if current_page?(chats_index_path)}" do %>
-                <i class='bx bx-message-square-dots'></i>
-                <span class="links_name">AI Chats</span>
-            <% end %>
-        </li>
-        <li>
-            <%= link_to conversations_path, data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Chats" }, class: "nav-link #{'active' if current_page?(conversations_path)}" do %>
-                <i class='bx bx-user-circle'></i>
-                <span class="links_name">User Chats</span>
-            <% end %>
-        </li>
-        <li>
-            <%= link_to images_path, data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Image" }, class: "nav-link #{'active' if current_page?(images_path)}" do %>
-                <i class='bx bx-image-alt'></i>
-                <span class="links_name">Image</span>
-            <% end %>
-        </li>
         
         <!-- <%= tag.li data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Messages" } do %>
             <a href="#" class="nav-link">

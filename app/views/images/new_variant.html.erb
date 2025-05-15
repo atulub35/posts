@@ -1,0 +1,59 @@
+<div class="container py-5" data-controller="variant-form">
+  <h1 class="mb-4">Generate House Painting Variants</h1>
+  
+  <%= form_with url: variants_images_path, 
+                method: :post, 
+                local: false, 
+                data: { 
+                  turbo: true,
+                  variant_form_target: "form",
+                  action: "turbo:submit-start->variant-form#submitForm turbo:submit-end->variant-form#success turbo:submit-error->variant-form#error"
+                }, 
+                html: { 
+                  multipart: true, 
+                  class: "mb-4" 
+                } do |form| %>
+    <div class="mb-3">
+      <%= form.label :house_image, "Upload House Image", class: "form-label" %>
+      <%= form.file_field :house_image, class: "form-control", accept: "image/*", required: true %>
+      <div class="form-text">Please upload an image of a house (JPEG, PNG, etc. max 10MB)</div>
+    </div>
+    
+    <div class="mb-3">
+      <%= form.label :painting_style, "Painting Style (Optional)", class: "form-label" %>
+      <%= form.text_field :painting_style, class: "form-control", placeholder: "e.g., Impressionist, Watercolor, Vibrant colors, etc." %>
+      <div class="form-text">Describe the painting style you'd like to see (leave empty for AI suggestion)</div>
+    </div>
+    
+    <div class="mb-3">
+      <%= form.submit "Generate Variants", class: "btn btn-primary", data: { disable_with: "Processing..." } %>
+      <%= link_to "Back to Gallery", images_path, class: "btn btn-outline-secondary ms-2" %>
+    </div>
+  <% end %>
+
+  <div id="loading_indicator" class="text-center my-5" style="display:none;" data-variant-form-target="loading">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-3">Processing your image with AI...</p>
+    <p class="text-muted small">This may take up to 30-60 seconds</p>
+  </div>
+
+  <div id="main_content" data-variant-form-target="content">
+    <%= turbo_frame_tag "main_content", target: "_top" %>
+  </div>
+
+  <div class="card mt-5">
+    <div class="card-header">
+      <h5 class="card-title mb-0">How it works</h5>
+    </div>
+    <div class="card-body">
+      <ol class="ps-3">
+        <li class="mb-2">Upload a photo of a house you'd like to see painted differently</li>
+        <li class="mb-2">Optionally specify a painting style (e.g., "Van Gogh style", "Watercolor")</li>
+        <li class="mb-2">Our AI will analyze the architectural features of your house</li>
+        <li class="mb-2">Then generate a realistic painting of your house in the requested style</li>
+      </ol>
+    </div>
+  </div>
+</div> 

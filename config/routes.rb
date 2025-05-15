@@ -25,14 +25,55 @@ Rails.application.routes.draw do
       post :ask
     end
   end
-  resources :images, only: [:index, :new, :create]
+  resources :images, only: [:index, :new, :create, :destroy] do
+    collection do
+      get :new_variant
+      post :variants
+      get :test_api
+      get :debug_vision
+      post :debug_vision
+    end
+  end
 
   resources :conversations, only: [:index, :show, :create] do
-    resources :messages, only: [:create]
+    resources :messages, only: [:create, :destroy]
+  end
+
+  resources :messages, only: [:show]
+
+  # User status routes
+  resources :users, only: [] do
+    member do
+      get :status
+    end
+    
+    collection do
+      post :update_status
+    end
+  end
+  
+  # User status with Turbo Streams
+  resources :user_statuses, only: [] do
+    collection do
+      post :publish
+    end
+  end
+  
+  # API endpoints
+  namespace :api do
+    get "/presigned_url/:message_id", to: "presigned_urls#show", as: :presigned_url
+    resources :users, only: [] do
+      member do
+        get :avatar
+      end
+    end
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # Defines the root path route ("/")
-  # root "articles#index"
+  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
+  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  get "up" => "rails/health#show", as: :rails_health_check
+
+  get "/profiles", to: "profiles#index", as: :profiles
 end

@@ -1,12 +1,17 @@
-
 <div class="container h-100">
     <div class="row h-100 align-items-center">
-        <div class="col-12 col-md-5 offset-0 offset-md-4">
+        <div class="col-12 col-md-7 col-lg-6 offset-0 offset-md-3 offset-lg-3">
         <div class="card border-0 shadow-lg rounded-4" data-controller="modal-form login" data-action="turbo:submit-end->login#submitEnd turbo:submit-start->login#submitStart"> 
             <div class="card-body p-5">
                 <h2 class="mb-3">Sign in to your account</h2>
                 <%# <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> %>
-                <%= form_for(resource, as: resource_name, url: session_path(resource_name), data: { modal_form_target: "form"}) do |f| %>
+                <%= form_for(resource, as: resource_name, url: session_path(resource_name), 
+                    data: {
+                      modal_form_target: "form",
+                      turbo: true
+                    }) do |f| %>
+                    <%= f.hidden_field :authenticity_token, value: form_authenticity_token %>
+                
                     <div class="mb-3">
                         <%= f.label :email, class: "form-label" %>
                         <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
@@ -32,7 +37,7 @@
 
                     <div class="d-grid gap-2 col-12 mx-auto">
                         <button type="button" class="btn btn-primary" data-login-target="button" data-action="modal-form#submitModalForm">Sign In</button>
-                        <%#= f.submit "Log in", class: "btn btn-primary" %>
+                        <%#= f.submit "Sign In", class: "btn btn-primary", data: { login_target: "button", turbo: true } %>
                     </div>
                     <%= render "devise/shared/links" %>
                 <% end %>

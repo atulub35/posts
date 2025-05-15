@@ -1,20 +1,52 @@
-<div class="message <%= message.user == current_user ? 'message-sent' : 'message-received' %>" data-sender-id="<%= message.user.id %>" data-chat-scroll-target="message">
-  <div class="message-content <%= message.user == current_user ? 'bg-primary text-white' : 'bg-body-tertiary' %> rounded-3 p-3">
-    <div class="d-flex align-items-center mb-1">
-      <% if message.user.avatar.attached? %>
-        <%= image_tag message.user.avatar_mini, class: "rounded-circle me-2", style: "width: 24px; height: 24px; object-fit: cover;" %>
-      <% else %>
-        <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-2" style="width: 24px; height: 24px;">
-          <i class="bx bx-user text-white"></i>
+<div class="message-wrapper <%= message.user == current_user ? 'user' : 'ai' %>" 
+     id="<%= dom_id(message) %>" 
+     data-user-id="<%= message.user_id %>"
+     data-chat-scroll-target="message">
+  <div class="message-bubble <%= message.user == current_user ? 'user-message' : 'ai-message' %>">
+    <div class="message-content">
+      <%= message.content %>
+      
+      <% if message.image.attached? %>
+        <div data-controller="s3-image" 
+             data-s3-image-message-id-value="<%= message.id %>"
+             class="mt-2">
+          <div data-s3-image-target="placeholder" class="bg-light rounded p-3 d-flex flex-column align-items-center justify-content-center" style="min-height: 120px; width: 100%;">
+            <div class="spinner-border text-primary mb-2" role="status" style="width: 1.5rem; height: 1.5rem;">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="text-center">
+              <small class="text-muted d-block"><%= message.image.filename.to_s %></small>
+              <small class="text-muted d-block">
+                <%= number_to_human_size(message.image.byte_size) %>
+              </small>
+            </div>
+          </div>
         </div>
       <% end %>
-      <small class="<%= message.user == current_user ? 'text-white-50' : 'text-muted' %>">
-        <%= message.user.name || message.user.email %>
-      </small>
     </div>
-    <p class="mb-0"><%= message.content %></p>
-    <small class="<%= message.user == current_user ? 'text-white-50' : 'text-muted' %>">
-      <%= time_ago_in_words(message.created_at) %> ago
-    </small>
+    <div class="message-meta d-flex justify-content-between align-items-center mt-2">
+      <div class="message-role">
+        <% if message.user == current_user %>
+          <i class="bx bx-user-circle"></i>
+          You
+        <% else %>
+          <i class="bx bx-user"></i>
+          <%= message.user ? (message.user.name || message.user.email) : "Unknown User" %>
+        <% end %>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <div class="message-time">
+          <%= message.created_at.strftime("%I:%M %p") %>
+        </div>
+        <% if message.user == current_user %>
+          <%= button_to conversation_message_path(message.conversation, message), 
+              method: :delete,
+              form: { data: { turbo_confirm: "Delete this message?" } },
+              class: "btn btn-sm btn-link text-danger p-0 d-flex align-items-center" do %>
+            <i class="bx bx-trash-alt"></i>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>

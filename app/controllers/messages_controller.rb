@@ -15,7 +15,7 @@ class MessagesController < ApplicationController
 
     if @message.save
       # Broadcast a neutral message that each client will style appropriately
-      broadcast_message_to_conversation(@message)
+      broadcast_message_to_conversation
       
       respond_to do |format|
         format.html { redirect_to conversation_path(@conversation) }
@@ -37,41 +37,84 @@ class MessagesController < ApplicationController
     end
   end
 
+  def show
+    @message = Message.find(params[:id])
+    
+    respond_to do |format|
+      format.json do
+        if @message.image.attached?
+          # Generate URLs using the helper methods - no image processing
+          full_url = view_context.s3_presigned_url(@message.image)
+          
+          render json: { 
+            full_url: full_url,
+            content_type: @message.image.content_type,
+            filename: @message.image.filename.to_s,
+            byte_size: @message.image.byte_size
+          }
+        else
+          render json: { error: 'No image attached' }, status: :not_found
+        end
+      end
+    end
+  end
+
+  def destroy
+    @conversation = Conversation.find(params[:conversation_id])
+    @message = @conversation.messages.find(params[:id])
+    
+    # Only allow the message creator to delete it
+    if @message.user == current_user
+      begin
+        # First purge any attached image to delete S3 objects
+        if @message.image.attached?
+          @message.image.purge
+        end
+        
+        # Then destroy the message
+        @message.destroy
+        
+        respond_to do |format|
+          format.html { redirect_to conversation_path(@conversation), notice: "Message deleted." }
+          format.turbo_stream { render turbo_stream: turbo_stream.remove(@message) }
+        end
+      rescue => e
+        Rails.logger.error "Failed to delete message: #{e.message}"
+        respond_to do |format|
+          format.html { redirect_to conversation_path(@conversation), alert: "Failed to delete message." }
+          format.turbo_stream { 
+            flash.now[:alert] = "Failed to delete message."
+            flash_html = render_to_string(partial: "shared/flash/notification")
+            render turbo_stream: turbo_stream.replace("flash-notification", html: flash_html)
+          }
+        end
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to conversation_path(@conversation), alert: "You cannot delete this message." }
+        format.turbo_stream { head :forbidden }
+      end
+    end
+  end
+
   private
 
-  def broadcast_message_to_conversation(message)
-    # Use turbo_stream.append instead of directly broadcasting HTML
-    # This ensures proper Turbo Stream events are triggered
-    html = <<~HTML
-      <div class="message" 
-           data-message-id="#{message.id}" 
-           data-sender-id="#{message.user_id}"
-           data-chat-scroll-target="message">
-        <div class="message-content rounded-3 p-3" data-sender="#{message.user_id}">
-          <div class="d-flex align-items-center mb-1">
-            #{render_avatar_html(message.user)}
-            <small>
-              #{message.user ? (message.user.name || message.user.email) : "Unknown User"}
-            </small>
-          </div>
-          <p class="mb-0">#{sanitize(message.content)}</p>
-          <small>
-            #{time_ago_in_words(message.created_at)} ago
-          </small>
-        </div>
-      </div>
-    HTML
-
-    # Broadcast in a way that triggers proper events
-    Turbo::StreamsChannel.broadcast_append_to(
-      message.conversation,
-      target: "messages_container",
-      html: html,
-      # Add these attributes to ensure the stream is properly processed
-      attributes: {
-        "data-scrollable": "true",
-        "data-chat-message": "true"
+  def broadcast_message_to_conversation
+    # Prepare the HTML of the message partial for broadcast
+    rendered_message = ApplicationController.render(
+      partial: 'messages/message',
+      locals: {
+        message: @message,
+        current_user: nil  # No current_user in broadcast context
       }
+    )
+
+    # Broadcast via Turbo Streams
+    Turbo::StreamsChannel.broadcast_append_to(
+      @conversation,
+      target: "messages_container",
+      partial: "messages/message",
+      locals: { message: @message, current_user: nil }
     )
   end
   
@@ -133,18 +176,9 @@ class MessagesController < ApplicationController
     else
       redirect_to new_user_session_path, alert: "Please sign in to continue"
     end
-  rescue ActiveRecord::RecordNotFound
-    respond_to do |format|
-      format.html { redirect_to conversations_path, alert: 'Conversation not found.' }
-      format.turbo_stream { 
-        flash.now[:alert] = 'Conversation not found.'
-        flash_html = render_to_string(partial: "shared/flash/notification")
-        render turbo_stream: turbo_stream.replace("flash-notification", html: flash_html)
-      }
-    end
   end
 
   def message_params
-    params.require(:message).permit(:content, :role)
+    params.require(:message).permit(:content, :role, :image)
   end
 end 

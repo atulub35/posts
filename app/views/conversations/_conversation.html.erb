@@ -1,9 +1,28 @@
 <%= link_to conversation_path(conversation), class: "list-group-item list-group-item-action" do %>
   <div class="d-flex align-items-center">
     <% other_user = conversation.other_participant(current_user) %>
-    <div class="flex-shrink-0">
-      <% if other_user&.avatar&.attached? %>
-        <%= image_tag other_user.avatar_thumbnail, class: "rounded-circle", style: "width: 48px; height: 48px; object-fit: cover;" %>
+    <div class="flex-shrink-0 position-relative">
+      <% if other_user %>
+        <div 
+          data-controller="user-avatar" 
+          data-user-avatar-user-id-value="<%= other_user.id %>" 
+          data-user-avatar-size-value="48"
+          data-initials="<%= other_user.name&.first&.upcase || other_user.email.first.upcase %>">
+          <div data-user-avatar-target="placeholder" class="rounded-circle bg-secondary d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+            <i class="bx bx-user text-white"></i>
+          </div>
+        </div>
+        
+        <!-- Status indicator -->
+        <div class="position-absolute bottom-0 end-0">
+          <% if other_user.online? %>
+            <div class="bg-success rounded-circle border border-white" style="width: 12px; height: 12px;"></div>
+          <% elsif other_user.away? %>
+            <div class="bg-warning rounded-circle border border-white" style="width: 12px; height: 12px;"></div>
+          <% else %>
+            <div class="bg-secondary rounded-circle border border-white" style="width: 12px; height: 12px;"></div>
+          <% end %>
+        </div>
       <% else %>
         <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
           <i class="bx bx-user text-white"></i>
@@ -12,7 +31,16 @@
     </div>
     <div class="flex-grow-1 ms-3">
       <div class="d-flex justify-content-between align-items-center">
-        <h6 class="mb-0"><%= other_user&.name || other_user&.email %></h6>
+        <div class="d-flex align-items-center">
+          <h6 class="mb-0 me-2"><%= other_user&.name || other_user&.email %></h6>
+          <small>
+            <% if other_user && other_user.online? %>
+              <span class="text-success">online</span>
+            <% elsif other_user && other_user.away? %>
+              <span class="text-warning">away</span>
+            <% end %>
+          </small>
+        </div>
         <small class="text-muted">
           <%= time_ago_in_words(conversation.updated_at) %> ago
         </small>

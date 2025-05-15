@@ -1,0 +1,9 @@
+<div class="alert alert-danger">
+  <h4 class="alert-heading">Error</h4>
+  <p><%= message %></p>
+  <hr>
+  <p class="mb-0">
+    <%= link_to "Try Again", new_variant_images_path, class: "btn btn-outline-danger btn-sm", data: { turbo_frame: "_top" } %>
+    <%= link_to "Back to Gallery", images_path, class: "btn btn-outline-secondary btn-sm ms-2", data: { turbo_frame: "_top" } %>
+  </p>
+</div> 

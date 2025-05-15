@@ -7,14 +7,27 @@ class ConversationsController < ApplicationController
   end
 
   def show
-    @messages = @conversation.messages.includes(:user).order(created_at: :asc)
+    @conversation = Conversation.find(params[:id])
+    unless @conversation.users.include?(current_user)
+      redirect_to conversations_path, alert: "You don't have access to this conversation"
+      return
+    end
+    
     @message = Message.new
-    
-    # Store the current user's ID to avoid Warden dependency in views
-    @current_user_id = current_user.id if current_user
-    
-    # Find the other user for the conversation header
+    @messages = @conversation.messages.includes(:user).order(created_at: :asc)
     @other_user = @conversation.other_participant(current_user)
+    @current_user_id = current_user.id
+    
+    # Update current user's status to online
+    current_user.update_online_status
+    
+    # Let Hotwire know we're viewing this conversation
+    Turbo::StreamsChannel.broadcast_replace_to(
+      @conversation,
+      target: "user_status_#{current_user.id}",
+      partial: "user_statuses/status",
+      locals: { user: current_user }
+    )
   end
 
   def create

@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["form", "input", "messages"]
+  static targets = ["form", "input", "messages", "imageInput", "imagePreview", "previewImage"]
   static values = {
     userId: Number
   }
@@ -16,6 +16,47 @@ export default class extends Controller {
     
     // Listen for Turbo Stream broadcasts
     this.setupBroadcastListener();
+
+    // Add image input change listener if the target exists
+    if (this.hasImageInputTarget) {
+      this.imageInputTarget.addEventListener('change', this.handleImageSelection.bind(this));
+    }
+  }
+  
+  // Handle image selection
+  handleImageSelection(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    // Check if file is an image
+    if (!file.type.match('image.*')) {
+      alert('Please select an image file');
+      this.imageInputTarget.value = '';
+      return;
+    }
+    
+    // Check file size (limit to 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Image size should be less than 5MB');
+      this.imageInputTarget.value = '';
+      return;
+    }
+    
+    // Show preview
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.previewImageTarget.src = e.target.result;
+      this.imagePreviewTarget.classList.remove('d-none');
+    };
+    reader.readAsDataURL(file);
+  }
+  
+  // Remove image
+  removeImage(event) {
+    event.preventDefault();
+    this.imageInputTarget.value = '';
+    this.previewImageTarget.src = '';
+    this.imagePreviewTarget.classList.add('d-none');
   }
   
   setupBroadcastListener() {
@@ -71,6 +112,53 @@ export default class extends Controller {
     messages.forEach(message => {
       const senderId = parseInt(message.dataset.senderId, 10);
       this.applyMessageStyling(message, currentUserId, senderId);
+    });
+    
+    // Check for any messages with placeholder images that need to be loaded
+    this.loadMessageImages();
+  }
+  
+  // Load images for any messages that have placeholders
+  loadMessageImages() {
+    const messageContainers = document.querySelectorAll(".message-wrapper[data-message-id]");
+    
+    messageContainers.forEach(container => {
+      const messageId = container.dataset.messageId;
+      const imagePlaceholder = container.querySelector('.placeholder-glow');
+      if (!imagePlaceholder) return;
+      
+      // Make an AJAX request to get the pre-signed URL
+      fetch(`/messages/${messageId}`, {
+        headers: {
+          'Accept': 'application/json'
+        }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('Image data received:', data);
+          if (data.image_url) {
+            // Replace placeholder with actual image using pre-signed URL
+            const imageHTML = `
+              <a href="${data.full_url}" target="_blank" class="d-block">
+                <img src="${data.image_url}" class="img-fluid rounded" 
+                     alt="${data.filename || 'Attached image'}"
+                     loading="lazy">
+              </a>
+            `;
+            imagePlaceholder.parentNode.innerHTML = imageHTML;
+          } else {
+            throw new Error('No pre-signed URL provided');
+          }
+        })
+        .catch(error => {
+          console.error('Error loading image:', error);
+          imagePlaceholder.parentNode.innerHTML = '<div class="alert alert-warning">Image could not be loaded</div>';
+        });
     });
   }
   
@@ -156,11 +244,22 @@ export default class extends Controller {
     event.preventDefault();
     
     const message = this.inputTarget.value.trim();
-    if (!message) return;
+    const hasImage = this.hasImageInputTarget && this.imageInputTarget.files.length > 0;
+    
+    // Require either text or an image
+    if (!message && !hasImage) return;
     
     // Submit the form
     this.formTarget.requestSubmit();
     this.inputTarget.value = "";
+    
+    // Reset image preview if we have one
+    if (this.hasImagePreviewTarget) {
+      this.imagePreviewTarget.classList.add('d-none');
+      if (this.hasImageInputTarget) {
+        this.imageInputTarget.value = '';
+      }
+    }
   }
 
   createMessageHtml(content, role) {

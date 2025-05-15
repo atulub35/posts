@@ -1,0 +1,41 @@
+<div class="container py-5">
+  <h1 class="mb-4">Your House Painting Variant</h1>
+  
+  <div class="row mb-5">
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Original House</h5>
+        </div>
+        <div class="card-body">
+          <img src="<%= @original_image_data %>" alt="Original house" class="img-fluid rounded" />
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Painted Variant</h5>
+        </div>
+        <div class="card-body">
+          <img src="<%= @image_url %>" alt="Painted house variant" class="img-fluid rounded" />
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5 class="card-title mb-0">AI Analysis</h5>
+    </div>
+    <div class="card-body bg-light">
+      <p class="card-text text-pre-line"><%= @analysis %></p>
+    </div>
+  </div>
+  
+  <div class="mt-4">
+    <%= link_to "Generate Another Variant", new_variant_images_path, class: "btn btn-primary me-2" %>
+    <%= link_to "Back to Gallery", images_path, class: "btn btn-outline-secondary" %>
+  </div>
+</div> 

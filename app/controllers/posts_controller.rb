@@ -37,11 +37,11 @@ class PostsController < ApplicationController
         format.turbo_stream
         broadcast_post(@post)
         format.html { redirect_to posts_path, notice: 'Post was successfully created.' }
-        format.json
+        format.json { render :create, status: :created }
       else
         flash.now[:alert] = @post.errors.full_messages.first
         format.turbo_stream { render :create, status: 406 }
-        format.json { render json: { error: @post.errors.full_messages.first }, status: 406 }
+        format.json { render json: { error: @post.errors.full_messages.first }, status: :unprocessable_entity }
       end
     end
   end
@@ -56,13 +56,14 @@ class PostsController < ApplicationController
       broadcast_post_update(@post)
       respond_to do |format|
         format.turbo_stream
-        format.json
+        format.json { render :update, status: :ok }
         format.html { redirect_to posts_path, notice: 'Post was successfully updated.' }
       end
     else
       respond_to do |format|
         flash.now[:notice] = @post.errors.full_messages.first
         format.html { render :edit }
+        format.json { render json: { error: @post.errors.full_messages.first }, status: :unprocessable_entity }
       end
     end
   end
@@ -76,11 +77,11 @@ class PostsController < ApplicationController
       if @post.save
         broadcast_post_update(@post)
         format.html { redirect_to posts_path, notice: 'Post was successfully liked.' }
-        format.json
+        format.json { render :like, status: :ok }
       else
         flash.now[:alert] = @post.errors.full_messages.first
         format.turbo_stream { render :create, status: 406 }
-        format.json { render json: { error: @post.errors.full_messages.first }, status: 406 }
+        format.json { render json: { error: @post.errors.full_messages.first }, status: :unprocessable_entity }
       end
     end
   end
@@ -91,11 +92,11 @@ class PostsController < ApplicationController
       if @post.save
         broadcast_post_update(@post)
         format.html { redirect_to posts_path, notice: 'Post was successfully liked.' }
-        format.json
+        format.json { render :repost, status: :ok }
       else
         flash.now[:alert] = @post.errors.full_messages.first
         format.turbo_stream { render :create, status: 406 }
-        format.json { render json: { error: @post.errors.full_messages.first }, status: 406 }
+        format.json { render json: { error: @post.errors.full_messages.first }, status: :unprocessable_entity }
       end
     end
   end
