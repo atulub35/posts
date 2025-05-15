@@ -10,28 +10,14 @@ export default class extends Controller {
   connect() {
     console.log("User presence controller connected")
     
-    if (!this.hasFormTarget) {
-      console.error("Missing form target in user_presence_controller")
-      return
-    }
-    
-    if (!this.hasStatusFieldTarget) {
-      console.error("Missing statusField target in user_presence_controller")
-      return
-    }
-    
-    console.log("Form action:", this.formTarget.action)
-    
     // Set up visibility change listener for tab switching
     document.addEventListener('visibilitychange', this.handleVisibilityChange.bind(this))
     
     // Set up unload listener for page navigation
     window.addEventListener('beforeunload', this.handleUnload.bind(this))
     
-    // Update presence immediately on connect - with slight delay to ensure DOM is ready
-    setTimeout(() => {
-      this.updateStatus('online')
-    }, 100)
+    // Update presence immediately on connect
+    this.updateStatus('online')
   }
   
   disconnect() {
@@ -40,7 +26,8 @@ export default class extends Controller {
     window.removeEventListener('beforeunload', this.handleUnload.bind(this))
     
     // Update status to offline when controller disconnects
-    this.updateStatus('offline')
+    // Using direct approach instead of updateStatus since controller is disconnecting
+    this.sendStatusUpdate('offline')
   }
   
   handleVisibilityChange() {
@@ -55,12 +42,17 @@ export default class extends Controller {
   
   handleUnload(event) {
     // For page unload, use the more reliable sendBeacon API
-    if (navigator.sendBeacon && this.hasFormTarget) {
-      // Set status to offline
-      this.statusFieldTarget.value = 'offline'
+    this.sendStatusUpdate('offline')
+  }
+  
+  sendStatusUpdate(status) {
+    if (this.hasFormTarget && this.hasStatusFieldTarget) {
+      // Set status field value
+      this.statusFieldTarget.value = status
       
-      // Use sendBeacon to reliably send the form data during page unload
-      navigator.sendBeacon(this.formTarget.action, new FormData(this.formTarget))
+      // Use sendBeacon to reliably send the form data during page unload/disconnect
+      const formData = new FormData(this.formTarget)
+      navigator.sendBeacon(this.formTarget.action, formData)
     }
   }
   
@@ -68,39 +60,11 @@ export default class extends Controller {
     // Update the hidden status field
     if (this.hasStatusFieldTarget) {
       this.statusFieldTarget.value = status
-      console.log(`Setting status to: ${status}`)
-    } else {
-      console.error("Can't update status - missing statusField target")
-      return
     }
     
     // Submit the form
     if (this.hasFormTarget) {
-      try {
-        console.log(`Submitting form with status: ${status}`)
-        
-        // Use fetch for more reliable submission
-        const formData = new FormData(this.formTarget)
-        fetch(this.formTarget.action, {
-          method: 'POST',
-          body: formData,
-          headers: {
-            'Accept': 'text/vnd.turbo-stream.html'
-          }
-        }).then(response => {
-          if (response.ok) {
-            console.log('Status updated successfully')
-          } else {
-            console.error(`Status update failed with status: ${response.status}`)
-          }
-        }).catch(error => {
-          console.error('Error updating status:', error)
-        })
-      } catch (error) {
-        console.error("Error submitting form:", error)
-      }
-    } else {
-      console.error("Can't submit form - missing form target")
+      this.formTarget.requestSubmit()
     }
   }
 } 

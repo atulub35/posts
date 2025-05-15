@@ -60,7 +60,6 @@ gem 'vite_rails'
 gem 'pagy', '~> 9.1'
 gem 'nokogiri', '>= 1.16.5'
 gem 'mini_magick'
-gem 'image_processing', '~> 1.2'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
