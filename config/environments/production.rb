@@ -57,7 +57,7 @@ Rails.application.configure do
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
-  config.cache_store = :redis_cache_store, { url: ENV['REDISCLOUD_URL'], expires_in: 90.minutes }
+  config.cache_store = :redis_cache_store, { url: ENV['REDISCLOUD_URL'] || ENV['REDIS_URL'], expires_in: 90.minutes }
 
 
 
