@@ -4,7 +4,7 @@ class ImagesController < ApplicationController
 
   def index
     # We're not storing images in session anymore
-    @generated_images = []
+    @generated_images = current_user&.generated_images&.order(created_at: :desc) || []
 
     respond_to do |format|
       format.html
@@ -52,16 +52,33 @@ class ImagesController < ApplicationController
 
       if response["data"].present?
         @image_url = response.dig("data", 0, "url")
-        # Store in session for history
-        # session[:generated_images] ||= []
-        # session[:generated_images].unshift({
-        #   id: Time.current.to_i,
-        #   url: @image_url,
-        #   prompt: prompt,
-        #   created_at: Time.current
-        # })
-        # # Keep only last 10 images
-        # session[:generated_images] = session[:generated_images].first(10)
+        
+        # Save the image to S3 if user is authenticated
+        if current_user.present?
+          # Create a new GeneratedImage record
+          @generated_image = current_user.generated_images.new(
+            prompt: prompt,
+            original_url: @image_url
+          )
+          
+          # Download the image from OpenAI
+          image_response = URI.open(@image_url)
+          
+          # Attach the image to our GeneratedImage record
+          @generated_image.image.attach(
+            io: image_response,
+            filename: "dalle-#{Time.current.to_i}.png",
+            content_type: 'image/png'
+          )
+          
+          if @generated_image.save
+            # Update the image_url to use our S3 URL
+            @image_url = Rails.application.routes.url_helpers.rails_blob_url(@generated_image.image)
+            Rails.logger.info "Image saved to S3: #{@image_url}"
+          else
+            Rails.logger.error "Failed to save GeneratedImage record: #{@generated_image.errors.full_messages.join(', ')}"
+          end
+        end
 
         respond_to do |format|
           format.html
@@ -210,7 +227,34 @@ class ImagesController < ApplicationController
         @original_image_data = "data:#{house_image.content_type};base64,#{image_base64}"
         @analysis = gpt_analysis
         
-        # Don't store in session to avoid bloat
+        # Save the image to S3 if user is authenticated
+        if current_user.present?
+          # Create a new GeneratedImage record
+          @generated_image = current_user.generated_images.new(
+            prompt: dalle_prompt,
+            original_url: @image_url,
+            style: painting_style,
+            is_variant: true
+          )
+          
+          # Download the image from OpenAI
+          image_response = URI.open(@image_url)
+          
+          # Attach the image to our GeneratedImage record
+          @generated_image.image.attach(
+            io: image_response,
+            filename: "house-variant-#{Time.current.to_i}.png",
+            content_type: 'image/png'
+          )
+          
+          if @generated_image.save
+            # Update the image_url to use our S3 URL
+            @image_url = Rails.application.routes.url_helpers.rails_blob_url(@generated_image.image)
+            Rails.logger.info "House variant image saved to S3: #{@image_url}"
+          else
+            Rails.logger.error "Failed to save house variant image: #{@generated_image.errors.full_messages.join(', ')}"
+          end
+        end
 
         # Simply respond with the appropriate format
         if request.format.html?
@@ -276,12 +320,22 @@ class ImagesController < ApplicationController
   end
 
   def destroy
-    # Since we're not storing in session, this method will need modification in the future
-    # to handle persistent storage
+    @generated_image = GeneratedImage.find_by(id: params[:id])
     
-    respond_to do |format|
-      format.html { redirect_to images_path, notice: "Image was successfully deleted." }
-      format.json { render :destroy }
+    if @generated_image && @generated_image.user_id == current_user&.id
+      # Delete the image attachment and record
+      @generated_image.image.purge if @generated_image.image.attached?
+      @generated_image.destroy
+      
+      respond_to do |format|
+        format.html { redirect_to images_path, notice: "Image was successfully deleted." }
+        format.json { render json: { status: { code: 200, message: "Image was successfully deleted." }}, status: :ok }
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to images_path, alert: "Unable to delete image." }
+        format.json { render json: { status: { code: 403, message: "Unable to delete image." }}, status: :forbidden }
+      end
     end
   end
 

@@ -41,6 +41,10 @@ class ConversationsController < ApplicationController
     end
   end
 
+  def new
+    @users = User.where.not(id: current_user.id)
+  end
+
   private
 
   def set_conversation

@@ -1,4 +1,4 @@
-<div class="container-fluid h-100">
+<div class="container h-100">
   <%= turbo_stream_from @conversation %>
   <div class="row h-100" data-controller="chat-scroll chat-form user-presence" 
              data-current-user-id="<%= @current_user_id %>"
@@ -10,16 +10,11 @@
         <div class="card-header bg-body border-bottom d-flex justify-content-between align-items-center">
           <h4 class="mb-0 d-flex align-items-center">
             <% if @other_user %>
-              <div 
-                data-controller="user-avatar" 
-                data-user-avatar-user-id-value="<%= @other_user.id %>" 
-                data-user-avatar-size-value="32"
-                data-initials="<%= @other_user.name&.first&.upcase || @other_user.email.first.upcase %>"
-                class="me-2">
-                <div data-user-avatar-target="placeholder" class="rounded-circle bg-secondary d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
-                  <i class="bx bx-user text-white"></i>
-                </div>
-              </div>
+              <%= vc :Avatar, 
+                user: @other_user, 
+                size: 32, 
+                class_names: "me-2"
+              %>
             <% else %>
               <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
                 <i class="bx bx-user text-white"></i>

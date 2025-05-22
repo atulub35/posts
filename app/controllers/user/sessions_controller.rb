@@ -67,10 +67,10 @@ class User::SessionsController < Devise::SessionsController
     yield if block_given?
 
     respond_to do |format|
-      format.html { redirect_to after_sign_out_path_for(resource_name) }
-      format.turbo_stream { redirect_to after_sign_out_path_for(resource_name) }
+      format.html { redirect_to new_user_session_path }
+      format.turbo_stream { redirect_to new_user_session_path }
       format.json { 
-        @redirect_path = after_sign_out_path_for(resource_name)
+        @redirect_path = new_user_session_path
         render 'destroy'
       }
     end

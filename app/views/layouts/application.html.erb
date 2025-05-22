@@ -34,27 +34,7 @@
         <%= render "/shared/sidebar" %>
         <!-- Main content area -->
         <section class="home-section">
-            <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom shadow-sm">
-                <div class="container-fluid">
-                    <!-- Search bar -->
-                    <div class="d-flex align-items-center flex-grow-1">
-                        <div class="search-container position-relative">
-                            
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-end align-items-center gap-3">
-                        <%= render "/shared/theme" %>
-                        <%= button_to destroy_user_session_path,
-                            class: "btn text-danger",
-                            method: :delete,
-                            form: {data: {turbo_confirm: 'Are you sure?'}} do %>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                        <% end %>
-                    </div>
-                </div>
-            </nav>
-
-
+            <%= render "/shared/navbar" %>
         <%= yield %>
         <%= render "shared/flash/notification_turbo_frame" %>
         </section>

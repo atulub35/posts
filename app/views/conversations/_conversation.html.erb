@@ -3,26 +3,11 @@
     <% other_user = conversation.other_participant(current_user) %>
     <div class="flex-shrink-0 position-relative">
       <% if other_user %>
-        <div 
-          data-controller="user-avatar" 
-          data-user-avatar-user-id-value="<%= other_user.id %>" 
-          data-user-avatar-size-value="48"
-          data-initials="<%= other_user.name&.first&.upcase || other_user.email.first.upcase %>">
-          <div data-user-avatar-target="placeholder" class="rounded-circle bg-secondary d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
-            <i class="bx bx-user text-white"></i>
-          </div>
-        </div>
-        
-        <!-- Status indicator -->
-        <div class="position-absolute bottom-0 end-0">
-          <% if other_user.online? %>
-            <div class="bg-success rounded-circle border border-white" style="width: 12px; height: 12px;"></div>
-          <% elsif other_user.away? %>
-            <div class="bg-warning rounded-circle border border-white" style="width: 12px; height: 12px;"></div>
-          <% else %>
-            <div class="bg-secondary rounded-circle border border-white" style="width: 12px; height: 12px;"></div>
-          <% end %>
-        </div>
+        <%= vc :Avatar, 
+          user: other_user, 
+          size: 48, 
+          show_status: true
+        %>
       <% else %>
         <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
           <i class="bx bx-user text-white"></i>

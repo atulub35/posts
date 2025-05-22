@@ -1,0 +1,30 @@
+<div class="avatar-component position-relative <%= class_names %>"
+     data-controller="user-avatar"
+     data-user-avatar-user-id-value="<%= user&.id %>"
+     data-user-avatar-size-value="<%= size %>"
+     data-initials="<%= initials %>">
+  
+  <% if has_avatar? %>
+    <div data-user-avatar-target="placeholder" 
+         class="rounded-circle bg-secondary d-flex align-items-center justify-content-center" 
+         style="<%= avatar_style %>">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  <% else %>
+    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" 
+         style="<%= avatar_style %>; font-size: <%= font_size %>;">
+      <%= initials %>
+    </div>
+  <% end %>
+  
+  <% if show_status %>
+    <span class="position-absolute bottom-0 end-0 translate-middle p-1 border border-light rounded-circle <%= status_class %>" 
+          style="width: <%= size / 4 %>px; height: <%= size / 4 %>px;">
+      <span class="visually-hidden">
+        <%= user&.status || "offline" %>
+      </span>
+    </span>
+  <% end %>
+</div> 

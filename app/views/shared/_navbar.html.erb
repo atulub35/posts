@@ -1,7 +1,53 @@
-<!-- Add to your user dropdown menu in the navbar -->
-<div class="dropdown-item">
-  <div class="form-check form-switch">
-    <input class="form-check-input" type="checkbox" role="switch" id="dataSavingToggle" data-controller="data-saving" data-action="change->data-saving#toggle">
-    <label class="form-check-label" for="dataSavingToggle">Data-saving mode</label>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item d-block d-lg-none">
+          <%= link_to root_path, class: "nav-link #{'active' if current_page?(root_path)}", data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Home" } do %>
+              <i class='bx bx-home'></i>
+              <span class="links_name">Home</span>
+          <% end %>
+        </li>
+        <li class="nav-item d-block d-lg-none">
+          <%= link_to posts_path, class: "nav-link #{'active' if current_page?(posts_path)}", data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Posts" } do %>
+              <i class='bx bxl-blogger'></i>
+              <span class="links_name">Posts</span>
+          <% end %>
+        </li>
+        <li class="nav-item d-block d-lg-none">
+          <%= link_to chats_index_path, class: "nav-link #{'active' if current_page?(chats_index_path)}", data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "AI Chat" } do %>
+              <i class='bx bx-message-square-dots'></i>
+              <span class="links_name">AI Chat</span>
+          <% end %>
+        </li>
+        <li class="nav-item d-block d-lg-none">
+          <%= link_to conversations_path, class: "nav-link #{'active' if current_page?(conversations_path)}", data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Conversations" } do %>
+              <i class='bx bx-user-circle'></i>
+              <span class="links_name">Conversations</span>
+          <% end %>
+        </li>
+        <li class="nav-item d-block d-lg-none">
+          <%= link_to images_path, class: "nav-link #{'active' if current_page?(images_path)}", data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Images" } do %>
+              <i class='bx bx-image-alt'></i>
+              <span class="links_name">Images</span>
+          <% end %>
+        </li>
+        <li class="nav-item">
+          <%= render "/shared/theme" %>
+        </li>
+        <li class="nav-item">
+          <%= button_to destroy_user_session_path,
+              class: "btn text-danger",
+              method: :delete,
+              form: {data: {turbo_confirm: 'Are you sure?'}} do %>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          <% end %>
+        </li>
+      </ul>
+    </div>
   </div>
-</div> 
+</nav>

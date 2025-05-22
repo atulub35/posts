@@ -101,7 +101,7 @@ export default class extends Controller {
     if (this.hasPlaceholderTarget) {
       this.placeholderTarget.innerHTML = `
         <div class="text-center p-3">
-          <small class="text-muted d-block mb-2">Tap to load image</small>
+          <small class="d-block mb-2">Tap to load image</small>
           <button class="btn btn-sm btn-outline-primary" data-action="s3-image#loadImage">
             <i class="bx bx-image me-1"></i> Load image
           </button>

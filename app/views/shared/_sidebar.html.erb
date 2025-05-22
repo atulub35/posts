@@ -7,7 +7,7 @@
     data-sidebar-scroll-class="scroll"
     data-sidebar-menu-class="bx-menu"
     data-sidebar-menu-alt-right-class="bx-menu-alt-right"
-    class="sidebar posts shadow" 
+    class="sidebar posts shadow d-lg-block d-none" 
     data-sidebar-target="sidebar">
 
   <div class="logo-details">
@@ -22,13 +22,13 @@
         <!-- List of navigation items -->
         <li>
             <%= link_to root_path, class: "nav-link #{'active' if current_page?(root_path)}", data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Home" } do %>
-                <i class='bx bx-home'></i>
-                <span class="links_name">Home</span>
+                <i class='bx bxs-dashboard'></i>
+                <span class="links_name">Dashboard</span>
             <% end %>
         </li>
         <li>
             <%= link_to posts_path, class: "nav-link #{'active' if current_page?(posts_path)}", data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Posts" } do %>
-                <i class='bx bxl-blogger'></i>
+                <i class='bx bx-mail-send'></i>
                 <span class="links_name">Posts</span>
             <% end %>
         </li>
@@ -53,7 +53,7 @@
         </li>
         <li>
             <%= link_to profiles_show_path, data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Profile" }, class: "nav-link #{'active' if current_page?(profiles_show_path)}" do %>
-                <i class='bx bx-user'></i>
+                <i class='bx bx-cog'></i>
                 <span class="links_name">Profile</span>
             <% end %>
         </li>

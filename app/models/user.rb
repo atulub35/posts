@@ -12,6 +12,7 @@ class User < ApplicationRecord
   has_many :conversations, through: :conversation_participants
   has_one_attached :avatar
   has_many :images, dependent: :destroy
+  has_many :generated_images, dependent: :destroy
   validate :correct_avatar_mime_type
   
   attr_accessor :remove_avatar
