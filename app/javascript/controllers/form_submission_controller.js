@@ -3,10 +3,14 @@ import { delayedAction } from "./utilities/misc"
 import { debounce } from 'lodash';
 
 export default class extends Controller {
-    static targets = ["form"]
+    static targets = ["form", "searchInput"]
 
     initialize(){
         this.debounceSearch = debounce(this.onInput, 500).bind(this);
+    }
+
+    connect(){
+        this.searchInputTarget.focus()
     }
 
     search() {

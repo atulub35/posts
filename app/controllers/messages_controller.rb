@@ -100,21 +100,16 @@ class MessagesController < ApplicationController
   private
 
   def broadcast_message_to_conversation
-    # Prepare the HTML of the message partial for broadcast
-    rendered_message = ApplicationController.render(
-      partial: 'messages/message',
-      locals: {
-        message: @message,
-        current_user: nil  # No current_user in broadcast context
-      }
-    )
-
     # Broadcast via Turbo Streams
     Turbo::StreamsChannel.broadcast_append_to(
       @conversation,
       target: "messages_container",
       partial: "messages/message",
-      locals: { message: @message, current_user: nil }
+      locals: { 
+        message: @message, 
+        current_user: @message.user,
+        params: { current_user_id: @message.user_id }
+      }
     )
   end
   

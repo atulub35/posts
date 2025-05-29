@@ -7,7 +7,11 @@ class Post < ApplicationRecord
   belongs_to :user 
   scope :by_user, ->(user) { where(user_id: user.id) }
 
-  scope :search, ->(query) { joins(:rich_text_body).where("LOWER(action_text_rich_texts.body) LIKE LOWER(?)", "%#{query}%") }
+  scope :search, ->(query) { 
+    joins(:rich_text_body)
+    .where("LOWER(title) LIKE LOWER(?) OR LOWER(action_text_rich_texts.body) LIKE LOWER(?)", 
+           "%#{query}%", "%#{query}%")
+  }
 
   has_rich_text :body
 end

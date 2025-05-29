@@ -12,48 +12,50 @@
 
   <div class="logo-details">
     <!-- Icon and logo name -->
-    <i class='bx bxl-c-plus-plus icon'></i>
-    <div class="logo_name">Outsider</div>
-    <i class='bx bx-menu' id="btn" data-sidebar-target="closeBtn" data-action="click->sidebar#toggleSidebar"></i>
+    <i class="bx fs-3 bxl-c-plus-plus icon"></i>
+    <%= link_to root_path, class: "nav-link" do %>
+        <div class="logo_name">Outsider</div>
+    <% end %>
+    <i class="bx bx-menu" id="btn" data-sidebar-target="closeBtn" data-action="click->sidebar#toggleSidebar"></i>
     <!-- Menu button to toggle sidebar -->
   </div>
   
     <ul class="nav-list m-0 p-0" data-sidebar-target="navList">
         <!-- List of navigation items -->
         <li>
-            <%= link_to root_path, class: "nav-link #{'active' if current_page?(root_path)}", data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Home" } do %>
-                <i class='bx bxs-dashboard'></i>
+            <%= link_to root_path, class: "nav-link #{"active" if current_page?(root_path)}", data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Home" } do %>
+                <i class="bx fs-3 bxs-dashboard"></i>
                 <span class="links_name">Dashboard</span>
             <% end %>
         </li>
         <li>
-            <%= link_to posts_path, class: "nav-link #{'active' if current_page?(posts_path)}", data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Posts" } do %>
-                <i class='bx bx-mail-send'></i>
+            <%= link_to posts_path, class: "nav-link #{"active" if current_page?(posts_path)}", data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Posts" } do %>
+                <i class="bx fs-3 bx-mail-send"></i>
                 <span class="links_name">Posts</span>
             <% end %>
         </li>
         
         <li>
-            <%= link_to chats_index_path, data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "AI Chat" }, class: "nav-link #{'active' if current_page?(chats_index_path)}" do %>
-                <i class='bx bx-message-square-dots'></i>
+            <%= link_to chats_index_path, data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "AI Chat" }, class: "nav-link #{"active" if current_page?(chats_index_path)}" do %>
+                <i class="bx fs-3 bx-message-square-dots"></i>
                 <span class="links_name">AI Chat</span>
             <% end %>
         </li>
         <li>
-            <%= link_to conversations_path, data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Conversations" }, class: "nav-link #{'active' if current_page?(conversations_path)}" do %>
-                <i class='bx bx-user-circle'></i>
+            <%= link_to conversations_path, data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Conversations" }, class: "nav-link #{"active" if current_page?(conversations_path)}" do %>
+                <i class="bx bx-conversation fs-3" ></i>
                 <span class="links_name">Conversations</span>
             <% end %>
         </li>
         <li>
-            <%= link_to images_path, data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Images" }, class: "nav-link #{'active' if current_page?(images_path)}" do %>
-                <i class='bx bx-image-alt'></i>
+            <%= link_to images_path, data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Images" }, class: "nav-link #{"active" if current_page?(images_path)}" do %>
+                <i class="bx fs-3 bx-image-alt"></i>
                 <span class="links_name">Images</span>
             <% end %>
         </li>
         <li>
-            <%= link_to profiles_show_path, data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Profile" }, class: "nav-link #{'active' if current_page?(profiles_show_path)}" do %>
-                <i class='bx bx-cog'></i>
+            <%= link_to profiles_show_path, data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Profile" }, class: "nav-link #{"active" if current_page?(profiles_show_path)}" do %>
+                <i class="bx fs-3 bx-cog"></i>
                 <span class="links_name">Profile</span>
             <% end %>
         </li>
@@ -61,59 +63,45 @@
         
         <!-- <%= tag.li data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Messages" } do %>
             <a href="#" class="nav-link">
-                <i class='bx bx-chat'></i>
+                <i class="bx bx-chat"></i>
                 <span class="links_name">Messages</span>
             </a>
         <% end %>
         
         <%= tag.li data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Analytics" } do %>
             <a href="#" class="nav-link">
-                <i class='bx bx-pie-chart-alt-2'></i>
+                <i class="bx bx-pie-chart-alt-2"></i>
                 <span class="links_name">Analytics</span>
             </a>
         <% end %>
         
         <%= tag.li data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Files" } do %>
             <a href="#" class="nav-link">
-                <i class='bx bx-folder'></i>
+                <i class="bx bx-folder"></i>
                 <span class="links_name">File Manager</span>
             </a>
         <% end %>
         
         <%= tag.li data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Order" } do %>
             <a href="#" class="nav-link">
-                <i class='bx bx-cart-alt'></i>
+                <i class="bx bx-cart-alt"></i>
                 <span class="links_name">Order</span>
             </a>
         <% end %>
         
         <%= tag.li data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Saved" } do %>
             <a href="#" class="nav-link">
-                <i class='bx bx-heart'></i>
+                <i class="bx bx-heart"></i>
                 <span class="links_name">Saved</span>
             </a>
         <% end %>
         
         <%= tag.li data: { action: "click->sidebar#hilightLink", sidebar_target: "link", bs_toggle: "tooltip", bs_placement: "right", bs_original_title: "Setting" } do %>
             <a href="#" class="nav-link">
-                <i class='bx bx-cog'></i>
+                <i class="bx bx-cog"></i>
                 <span class="links_name">Setting</span>
             </a>
         <% end %>
          -->
-        <!-- Profile section -->
-        <li class="profile">
-            <div class="profile-details">
-                <div class="name_job">
-                    <!-- <div class="name"><%= current_user&.name %></div> -->
-                </div>
-            </div>
-            <%= button_to destroy_user_session_path,
-                class: "btn text-danger",
-                method: :delete,
-                form: {data: {turbo_confirm: 'Are you sure?'}} do %>
-                <i class='bx bx-log-out bg-light-subtle text-light-emphasis' data-sidebar-target="white" id="log_out"></i>
-            <% end %>
-        </li>
     </ul>
 </nav>

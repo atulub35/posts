@@ -30,7 +30,11 @@
              data-chat-form-target="container"
              data-chat-scroll-target="container">
           <%= turbo_frame_tag "messages", data: { current_user_id: @current_user_id } do %>
-            <div id="messages_container" class="d-flex flex-column gap-3" data-chat-form-target="messages">
+            <div id="messages_container" class="d-flex flex-column gap-3" 
+                 data-chat-form-target="messages"
+                 data-controller="message-ownership"
+                 data-message-ownership-current-user-id-value="<%= current_user.id %>"
+                 data-current-user-id="<%= current_user.id %>">
               <% if @messages.any? %>
                 <% @messages.each do |message| %>
                   <div class="message-wrapper <%= message.user == current_user ? 'user' : 'ai' %>" 
@@ -77,7 +81,7 @@
                             <%= button_to conversation_message_path(@conversation, message), 
                                 method: :delete,
                                 form: { data: { turbo_confirm: "Delete this message?" } },
-                                class: "btn btn-sm btn-link text-danger p-0 d-flex align-items-center" do %>
+                                class: "btn btn-sm btn-danger" do %>
                               <i class="bx bx-trash-alt"></i>
                             <% end %>
                           <% end %>
