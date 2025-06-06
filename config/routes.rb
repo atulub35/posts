@@ -67,6 +67,12 @@ Rails.application.routes.draw do
         get :avatar
       end
     end
+    resources :images, only: [:index, :create, :destroy]
+    
+    # Explicitly define profile routes
+    get '/profile', to: 'profiles#show'
+    put '/profile', to: 'profiles#update'
+    patch '/profile', to: 'profiles#update'
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
