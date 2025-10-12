@@ -9,6 +9,9 @@ A Ruby on Rails application for managing posts with a modern web interface.
 - Redis
 - PostgreSQL
 
+## Live Demo
+https://outsider-284373f8936c.herokuapp.com
+
 ## Setup
 
 1. Clone the repository:
