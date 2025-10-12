@@ -11,9 +11,13 @@ A Ruby on Rails application for managing posts with a modern web interface.
 
 ## Live Demo
 https://outsider-284373f8936c.herokuapp.com
+User Name
 ```bash
-Username: atul612@gmail.com
-Password: 12345678
+atul612@gmail.com
+```
+Password
+```bash
+12345678
 ```
 
 ## Setup
