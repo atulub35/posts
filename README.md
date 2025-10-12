@@ -11,6 +11,7 @@ A Ruby on Rails application for managing posts with a modern web interface.
 
 ## Live Demo
 https://outsider-284373f8936c.herokuapp.com
+
 User Name
 ```bash
 atul612@gmail.com
