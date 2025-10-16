@@ -280,7 +280,7 @@ Devise.setup do |config|
   config.warden do |manager|
     manager.strategies.add(:json_authenticatable, JsonAuthenticatableStrategy)
     manager.default_strategies(scope: :user).unshift :json_authenticatable
-    manager.failure_app = Devise::FailureApp.new
+    manager.failure_app = Devise::FailureApp
   end
 
   # ==> Mountable engine configurations
