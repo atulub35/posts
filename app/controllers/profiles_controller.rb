@@ -12,10 +12,14 @@ class ProfilesController < ApplicationController
 
   def update
     @user = current_user
-    if @user.update(profile_params)
-      redirect_to profile_path, notice: "Profile updated successfully"
-    else
-      render :edit
+    respond_to do |format|
+      if @user.update(profile_params)
+        format.html { redirect_to profile_path, notice: "Profile updated successfully" }
+        format.json { render json: { user: @user }, status: :ok }
+      else
+        format.html { render :edit }
+        format.json { render json: { error: @user.errors.full_messages.first }, status: :unprocessable_entity }
+      end
     end
   end
 
