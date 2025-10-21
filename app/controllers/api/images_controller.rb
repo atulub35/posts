@@ -15,7 +15,7 @@ module Api
               prompt: image.prompt,
               is_variant: image.is_variant,
               style: image.style,
-              image_url: image.image.attached? ? Rails.application.routes.url_helpers.rails_blob_url(image.image) : image.original_url,
+              image_url: image.image.attached? ? url_for(image.image) : image.original_url,
               created_at: image.created_at,
               updated_at: image.updated_at
             }
@@ -85,7 +85,7 @@ module Api
             
             if @generated_image.save
               # Update the image_url to use our S3 URL
-              @image_url = Rails.application.routes.url_helpers.rails_blob_url(@generated_image.image)
+              @image_url = url_for(@generated_image.image)
               Rails.logger.info "Image saved to S3: #{@image_url}"
             else
               Rails.logger.error "Failed to save GeneratedImage record: #{@generated_image.errors.full_messages.join(', ')}"

@@ -93,4 +93,12 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+  
+  # Set host from environment variable (Heroku sets this automatically)
+  host = ENV.fetch('HOST') { ENV.fetch('HEROKU_APP_NAME') { 'localhost:3000' } }
+  host = "#{host}.herokuapp.com" if ENV['HEROKU_APP_NAME'].present? && !host.include?('.')
+  
+  config.action_controller.default_url_options = { host: host, protocol: 'https' }
+  config.action_mailer.default_url_options = { host: host, protocol: 'https' }
+  Rails.application.routes.default_url_options = { host: host, protocol: 'https' }
 end

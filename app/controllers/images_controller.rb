@@ -73,7 +73,7 @@ class ImagesController < ApplicationController
           
           if @generated_image.save
             # Update the image_url to use our S3 URL
-            @image_url = Rails.application.routes.url_helpers.rails_blob_url(@generated_image.image)
+            @image_url = url_for(@generated_image.image)
             Rails.logger.info "Image saved to S3: #{@image_url}"
           else
             Rails.logger.error "Failed to save GeneratedImage record: #{@generated_image.errors.full_messages.join(', ')}"
@@ -249,7 +249,7 @@ class ImagesController < ApplicationController
           
           if @generated_image.save
             # Update the image_url to use our S3 URL
-            @image_url = Rails.application.routes.url_helpers.rails_blob_url(@generated_image.image)
+            @image_url = url_for(@generated_image.image)
             Rails.logger.info "House variant image saved to S3: #{@image_url}"
           else
             Rails.logger.error "Failed to save house variant image: #{@generated_image.errors.full_messages.join(', ')}"
