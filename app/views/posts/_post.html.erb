@@ -59,6 +59,22 @@
                     </div>
                 <% end %>
             </div>
+            <div class="col-12">
+                <div class="accordion mt-3" id="<%= "#{dom_id(post)}_accordion" %>">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#<%= "#{dom_id(post)}_collapse" %>" aria-expanded="true" aria-controls="collapseOne">
+                            <%= post.title %>
+                        </button>
+                        </h2>
+                        <div id="<%= "#{dom_id(post)}_collapse" %>" class="accordion-collapse collapse" data-bs-parent="#<%= "#{dom_id(post)}_accordion" %>">
+                        <div class="accordion-body">
+                            <%= post.body %>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         <% end %>
     </div>
 <% end %>

@@ -1,5 +1,5 @@
 <%= turbo_frame_tag "show" do %>
-    <%= vc :TurboModal, title: @post.title, cancel_text: "Done" do |c| %>
-        <%= @post.body.to_plain_text %>
+    <%= vc :TurboModal, title: @post.title, cancel_text: "Done", modal_size: "modal-lg" do |c| %>
+        <%= @post.body %>
     <% end %>
 <% end %>
