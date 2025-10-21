@@ -26,6 +26,10 @@ console.log('Visit the guide for more information: ', 'https://vite-ruby.netlify
 
 // Example: Import a stylesheet in app/frontend/index.css
 // import '~/index.css'
+
+// Import Trix CSS
+import "trix/dist/trix.css"
+
 //= require jquery3
 //= require popper
 //= require bootstrap
